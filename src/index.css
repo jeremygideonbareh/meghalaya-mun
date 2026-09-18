@@ -1,0 +1,222 @@
+@import 'tailwindcss';
+
+/* Ranade by Indian Type Foundry (Fontshare), ITF Free Font License:
+   commercial web use and self-hosting are permitted. */
+@font-face {
+  font-family: 'Ranade';
+  src: url('/meghalaya-mun/fonts/ranade-variable.woff2') format('woff2');
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ranade';
+  src: url('/meghalaya-mun/fonts/ranade-variable-italic.woff2') format('woff2');
+  font-weight: 100 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/*
+ * A bright, printed-programme palette taken from what MMUN actually is:
+ * UN blue, programme paper, navy ink, Meghalaya's pine, and the orange of
+ * the Khasi mandarins the state is famous for. Solid colour only.
+ */
+@theme {
+  --color-paper: #f4efe4;
+  --color-card: #fffcf5;
+  --color-ink: #13223a;
+  --color-ink-soft: #4b5566;
+  --color-un: #2e77d0;
+  --color-un-deep: #1f5aa6;
+  --color-sky: #cfe2f5;
+  --color-orange: #f26b1d;
+  --color-orange-deep: #b8430f;
+  --color-pine: #1d5c47;
+
+  --font-display: 'Ranade', 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    background: var(--color-paper);
+  }
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-un);
+    outline-offset: 4px;
+  }
+  ::selection {
+    background: var(--color-orange);
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-[88rem] px-5 sm:px-8 lg:px-12;
+  }
+  .kicker {
+    @apply inline-flex items-center gap-3 font-mono text-[0.78rem] font-medium tracking-[0.22em] uppercase;
+  }
+  .kicker::before {
+    content: '';
+    @apply h-[2px] w-8 bg-current;
+  }
+  .btn {
+    @apply relative inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full px-7 text-[0.95rem] font-bold tracking-wide transition-[transform,background-color,color,box-shadow] duration-300 select-none;
+  }
+  .btn:active {
+    transform: scale(0.96);
+  }
+  .btn-blue {
+    @apply bg-un text-white hover:bg-ink;
+  }
+  .btn-orange {
+    @apply bg-orange text-ink hover:bg-ink hover:text-paper;
+  }
+  .btn-line {
+    @apply text-current ring-2 ring-current hover:bg-ink hover:text-paper hover:ring-ink;
+  }
+  .btn-white {
+    @apply bg-white text-ink hover:bg-orange;
+  }
+}
+
+/* A light paper grain, like a printed programme */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 0.9s steps(6) infinite;
+}
+@keyframes grain {
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-6%, 4%);
+  }
+  40% {
+    transform: translate(5%, -7%);
+  }
+  60% {
+    transform: translate(-3%, 8%);
+  }
+  80% {
+    transform: translate(7%, 2%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.marquee {
+  display: flex;
+  width: max-content;
+}
+
+/* Ken Burns photo stack in the hero */
+.kb {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.kb:first-child {
+  opacity: 1;
+}
+.kb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Custom cursor, desktop only */
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 120;
+  pointer-events: none;
+}
+@media (pointer: coarse) {
+  .cursor {
+    display: none;
+  }
+}
+
+html {
+  scrollbar-color: var(--color-un) var(--color-paper);
+}
+
+@keyframes scrollcue {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}
+@keyframes lightbox {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(20px);
+  }
+}
+
+/* Motion switched off: nothing moves, and the pinned chapters become plain stacks */
+html[data-motion='off'] .grain {
+  animation: none;
+}
+html[data-motion='off'] .cursor {
+  display: none;
+}
+html[data-motion='off'] *,
+html[data-motion='off'] *::before,
+html[data-motion='off'] *::after {
+  transition-duration: 0.01ms !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+}
+html[data-motion='off'] [data-theme-pin] {
+  height: auto;
+  padding-block: 7rem;
+}
+html[data-motion='off'] [data-theme-image] {
+  display: none;
+}
+html[data-motion='off'] [data-theme-panel] {
+  position: relative;
+  padding-block: 2.5rem;
+}
+html[data-motion='off'] [data-theme-word],
+html[data-motion='off'] [data-theme-rest] {
+  opacity: 1 !important;
+}
+html[data-motion='off'] [data-hscroll] {
+  height: auto;
+  padding-block: 7rem;
+}
+html[data-motion='off'] [data-htrack] {
+  width: auto;
+  flex-wrap: wrap;
+}

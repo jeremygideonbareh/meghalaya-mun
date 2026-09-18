@@ -1,0 +1,199 @@
+{
+ "dignitaries": {
+  "widths": [
+   480,
+   800,
+   993
+  ],
+  "ratio": 1.9663
+ },
+ "stage-group": {
+  "widths": [
+   480,
+   800
+  ],
+  "ratio": 1.6832
+ },
+ "delegate-bw": {
+  "widths": [
+   480
+  ],
+  "ratio": 1.1245
+ },
+ "placard-jpc": {
+  "widths": [
+   371
+  ],
+  "ratio": 0.7218
+ },
+ "keynote": {
+  "widths": [
+   480,
+   707
+  ],
+  "ratio": 0.6785
+ },
+ "drafting": {
+  "widths": [
+   421
+  ],
+  "ratio": 0.9253
+ },
+ "placard-thailand": {
+  "widths": [
+   389
+  ],
+  "ratio": 0.8549
+ },
+ "hands-up": {
+  "widths": [
+   480,
+   708
+  ],
+  "ratio": 1.556
+ },
+ "chair-guest": {
+  "widths": [
+   480
+  ],
+  "ratio": 1.0857
+ },
+ "speaker-blue": {
+  "widths": [
+   380
+  ],
+  "ratio": 0.7677
+ },
+ "committee-floor": {
+  "widths": [
+   480,
+   783
+  ],
+  "ratio": 1.5818
+ },
+ "arrival": {
+  "widths": [
+   480,
+   800
+  ],
+  "ratio": 1.8121
+ },
+ "podium-address": {
+  "widths": [
+   480,
+   800,
+   1083
+  ],
+  "ratio": 1.5857
+ },
+ "anthem": {
+  "widths": [
+   480,
+   640
+  ],
+  "ratio": 0.937
+ },
+ "refugee-challenge": {
+  "widths": [
+   480,
+   800,
+   1039
+  ],
+  "ratio": 1.5212
+ },
+ "committee-room": {
+  "widths": [
+   480,
+   800
+  ],
+  "ratio": 1.4895
+ },
+ "rapporteur": {
+  "widths": [
+   480,
+   750
+  ],
+  "ratio": 1.3158
+ },
+ "bureau": {
+  "widths": [
+   480,
+   800,
+   1157
+  ],
+  "ratio": 2.0298
+ },
+ "delegate-placard": {
+  "widths": [
+   480,
+   800,
+   1052
+  ],
+  "ratio": 2.0348
+ },
+ "resolution": {
+  "widths": [
+   480,
+   800
+  ],
+  "ratio": 1.7021
+ },
+ "chairs-debate": {
+  "widths": [
+   480,
+   800
+  ],
+  "ratio": 1.6228
+ },
+ "session": {
+  "widths": [
+   480,
+   697
+  ],
+  "ratio": 1.6795
+ },
+ "celebration": {
+  "widths": [
+   480,
+   736
+  ],
+  "ratio": 1.7735
+ },
+ "voting": {
+  "widths": [
+   480,
+   602
+  ],
+  "ratio": 1.4506
+ },
+ "award-certificate": {
+  "widths": [
+   480,
+   800,
+   1192
+  ],
+  "ratio": 1.5282
+ },
+ "award-stole": {
+  "widths": [
+   480,
+   800,
+   1180
+  ],
+  "ratio": 1.6978
+ },
+ "speaker-kharshiing": {
+  "widths": [
+   480,
+   800,
+   922
+  ],
+  "ratio": 1.1715
+ },
+ "logo": {
+  "widths": [
+   150
+  ],
+  "ratio": 1
+ }
+}
