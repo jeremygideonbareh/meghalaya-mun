@@ -23,8 +23,11 @@ function Cursor() {
         data-cursor-ring
         className="invisible fixed top-0 left-0 grid size-10 place-items-center rounded-full border-2 border-un"
       >
-        <span data-cursor-text className="invisible text-[5px] font-bold tracking-[0.18em] text-white uppercase" />
       </div>
+      <span
+        data-cursor-text
+        className="invisible fixed top-0 left-0 rounded-full bg-ink px-3 py-1.5 font-mono text-[11px] font-medium tracking-[0.16em] whitespace-nowrap text-white uppercase"
+      />
     </div>
   )
 }

@@ -22,7 +22,7 @@ const images = manifest as Record<string, { ratio: number }>
 
 export function Manifesto() {
   return (
-    <section id="manifesto" data-chapter="Who we are" className="relative bg-paper py-28 sm:py-40">
+    <section id="manifesto" data-chapter="Who we are" className="relative bg-paper py-20 sm:py-28">
       <div className="wrap grid gap-12 lg:grid-cols-[0.8fr_2fr]">
         <div>
           <p className="kicker text-orange-deep" data-reveal>
@@ -102,7 +102,7 @@ export function Theme() {
 
 export function Numbers() {
   return (
-    <section id="numbers" data-chapter="In numbers" className="relative overflow-hidden bg-orange py-28 sm:py-40">
+    <section id="numbers" data-chapter="In numbers" className="relative overflow-hidden bg-orange py-20 sm:py-28">
       <Crown aria-hidden className="pointer-events-none absolute -top-16 -right-24 w-[34rem] text-ink/[0.07]" data-speed="0.8" />
       <div className="wrap relative">
         <p className="kicker" data-reveal>
@@ -130,17 +130,7 @@ export function Numbers() {
 /* ------------------------------------------------------------ 05 Committees */
 
 const emblem = { un: Laurel, india: Chamber, press: Press }
-// Each card gets its own colour so the eight don't read as one repeated tile.
-const cardTints = [
-  'bg-card text-ink',
-  'bg-sky text-ink',
-  'bg-orange text-ink',
-  'bg-pine text-white',
-  'bg-card text-ink',
-  'bg-ink text-white',
-  'bg-sky text-ink',
-  'bg-orange text-ink',
-]
+
 
 export function Committees() {
   const [flipped, setFlipped] = useState<Set<string>>(new Set())
@@ -164,7 +154,7 @@ export function Committees() {
         </div>
 
         <div className="[perspective:1400px]">
-          <div data-htrack className="flex w-max gap-5 pr-[10vw] [transform-style:preserve-3d] sm:gap-7">
+          <div data-htrack className="-mx-5 flex w-max gap-[4vw] px-[8vw] [transform-style:preserve-3d] sm:mx-0 sm:gap-7 sm:px-0 sm:pr-[10vw]">
             {committees.map((c, i) => {
               const Icon = emblem[c.kind]
               const isFlipped = flipped.has(c.code)
@@ -172,7 +162,7 @@ export function Committees() {
                 <article
                   key={c.code}
                   data-hcard
-                  className="relative h-[min(62svh,30rem)] w-[min(82vw,24rem)] shrink-0 [transform-style:preserve-3d]"
+                  className="relative h-[min(60svh,30rem)] w-[84vw] shrink-0 [transform-style:preserve-3d] sm:w-[min(82vw,24rem)]"
                 >
                   <button
                     type="button"
@@ -185,7 +175,7 @@ export function Committees() {
                   >
                     {/* Front */}
                     <span
-                      className={`absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[1.75rem] p-7 shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [backface-visibility:hidden] sm:p-8 ${cardTints[i]}`}
+                      className={`absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[1.75rem] p-7 shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [backface-visibility:hidden] sm:p-8 ${c.tint}`}
                     >
                       <Crown aria-hidden className="pointer-events-none absolute -top-6 -right-8 w-44 opacity-[0.09]" />
                       <span className="relative flex items-start justify-between">
@@ -233,7 +223,7 @@ export function Committees() {
 
 export function Speaker() {
   return (
-    <section id="speaker" data-chapter="Guest speaker" data-spotlight className="relative overflow-hidden bg-paper py-28 sm:py-40">
+    <section id="speaker" data-chapter="Guest speaker" data-spotlight className="relative overflow-hidden bg-paper py-20 sm:py-28">
       <div
         data-spot-light
         aria-hidden
@@ -276,7 +266,7 @@ export function Frames() {
   const speeds = [10, -14, 8]
 
   return (
-    <section id="frames" data-chapter="In frames" className="relative overflow-hidden bg-card pt-28 sm:pt-40" aria-labelledby="frames-title">
+    <section id="frames" data-chapter="In frames" className="relative overflow-hidden bg-card pt-20 sm:pt-28" aria-labelledby="frames-title">
       <div className="wrap">
         <p className="kicker text-orange-deep" data-reveal>
           The 7th edition, in frames
@@ -410,12 +400,12 @@ export function Recognition() {
               style={{ zIndex: i + 1 }}
             >
               <div className="flex items-start justify-between gap-6">
-                <span className="font-mono text-sm tracking-[0.18em] uppercase opacity-80">Recognition · 0{i + 1}</span>
+                <span className="font-mono text-sm tracking-[0.18em] uppercase">Recognition · 0{i + 1}</span>
                 <Crown className="h-8 w-11 shrink-0 opacity-80" />
               </div>
               <div>
                 <h3 className="text-[clamp(2rem,4vw,3.4rem)]">{r.title}</h3>
-                <p className="mt-4 max-w-xl text-lg opacity-90">{r.body}</p>
+                <p className="mt-4 max-w-xl text-lg">{r.body}</p>
               </div>
             </li>
           ))}
@@ -428,11 +418,11 @@ export function Recognition() {
 /* ------------------------------------------------------------ 09 Partners */
 
 export function Partners() {
-  const all = partners.flatMap((p) => p.names)
+  const all = partners.flatMap((p) => p.names.map((n) => ({ name: n, group: p.group })))
   const half = Math.ceil(all.length / 2)
   const rows = [all.slice(0, half), all.slice(half)]
   return (
-    <section id="partners" data-chapter="Partners" className="relative overflow-hidden bg-paper py-28 sm:py-36" aria-labelledby="partners-title">
+    <section id="partners" data-chapter="Partners" className="relative overflow-hidden bg-paper py-20 sm:py-28" aria-labelledby="partners-title">
       <div className="wrap">
         <p className="kicker text-orange-deep" data-reveal>
           Partners of the 7th edition
@@ -442,30 +432,28 @@ export function Partners() {
         </h2>
       </div>
 
-      <div className="mt-16 grid">
+      {/* Screen readers get the plain list; the marquees are decoration */}
+      <ul className="sr-only">
+        {all.map((p) => (
+          <li key={p.name}>
+            {p.name}, {p.group}
+          </li>
+        ))}
+      </ul>
+      <div className="mt-14 grid" aria-hidden>
         {rows.map((row, r) => (
           <div key={r} className={`overflow-hidden py-6 ${r ? 'bg-un text-white' : 'border-y-2 border-ink'}`}>
             <div data-marquee={r ? 'right' : 'left'} className="marquee">
-              {[...row, ...row].map((n, i) => (
-                <span key={i} className="flex items-center gap-8 pr-8 font-display text-[clamp(2rem,5vw,4.4rem)] font-medium tracking-[-0.03em] whitespace-nowrap">
-                  {n}
+              {[...row, ...row].map((p, i) => (
+                <span key={i} className="flex items-center gap-6 pr-10 whitespace-nowrap">
+                  <span className="font-display text-[clamp(2rem,5vw,4.4rem)] font-medium tracking-[-0.03em]">{p.name}</span>
+                  <span className={`rounded-full px-3 py-1 font-mono text-xs tracking-[0.16em] uppercase ${r ? 'bg-white/15' : 'bg-ink text-paper'}`}>
+                    {p.group}
+                  </span>
                   <Crown className="h-6 w-8 shrink-0 text-orange" />
                 </span>
               ))}
             </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="wrap mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        {partners.map((p) => (
-          <div key={p.group} data-reveal className="border-t-2 border-ink pt-5">
-            <p className="font-mono text-xs tracking-[0.2em] text-orange-deep uppercase">{p.group}</p>
-            <ul className="mt-3 grid gap-1">
-              {p.names.map((n) => (
-                <li key={n}>{n}</li>
-              ))}
-            </ul>
           </div>
         ))}
       </div>

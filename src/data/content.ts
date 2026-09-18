@@ -65,10 +65,10 @@ export const manifesto =
   'Meghalaya Model United Nations is a youth organisation educating the young people of Meghalaya, and of Northeast India, about the issues shaping the world, through dialogue and discussion built on the processes and ideals of the United Nations.'
 
 export const stats = [
-  { value: 950, suffix: '+', label: 'Delegates at the 6th edition, national and international' },
+  { value: 950, suffix: '+', label: 'Delegates in 2025, national and international' },
   { value: 7, suffix: 'th', label: 'International edition, held in Shillong' },
   { value: 8, suffix: '', label: 'Committees in session over three days' },
-  { value: 12, suffix: '', label: 'Districts of Meghalaya whose Deputy Commissioners back MMUN' },
+  { value: 12, suffix: '', label: 'Districts of Meghalaya, all backing MMUN' },
   { value: 2, suffix: 'nd', label: 'MUN in the Northeast with UNIC collaboration status' },
   { value: 50, suffix: '+', label: 'Media mentions across Meghalaya' },
 ]
@@ -78,6 +78,8 @@ export type Committee = {
   name: string
   kind: 'un' | 'india' | 'press'
   body: string
+  /** card and placard colours; every committee has its own */
+  tint: string
 }
 
 export const committees: Committee[] = [
@@ -85,48 +87,56 @@ export const committees: Committee[] = [
     code: 'UNHRC',
     name: 'United Nations Human Rights Council',
     kind: 'un',
+    tint: 'bg-card text-ink',
     body: 'Established in 2006 to replace the UN Commission on Human Rights, its 47 member states address violations, conduct investigations and review every country through the Universal Periodic Review.',
   },
   {
     code: 'UNODC',
     name: 'United Nations Office on Drugs and Crime',
     kind: 'un',
+    tint: 'bg-sky text-ink',
     body: 'Founded in 1997, it leads the world on illicit drugs, organised crime, corruption and terrorism, from trafficking and cybercrime to violence against vulnerable groups.',
   },
   {
     code: 'DISEC',
     name: 'Disarmament and International Security Committee',
     kind: 'un',
+    tint: 'bg-orange text-ink',
     body: 'The UN General Assembly’s First Committee, facing nuclear disarmament, arms control, cyber security and peacekeeping, and the threats that cross every border.',
   },
   {
     code: 'UNSC',
     name: 'United Nations Security Council',
     kind: 'un',
+    tint: 'bg-pine text-white',
     body: 'Fifteen members, five with the veto, holding primary responsibility for international peace and security: to investigate, to impose sanctions and to authorise force.',
   },
   {
     code: 'AIPPM',
     name: 'All India Political Parties Meet',
     kind: 'india',
+    tint: 'bg-ink text-white',
     body: 'Where India’s political parties meet on issues of national importance. Famous for its slogans and satire, and open to debate in both English and Hindi.',
   },
   {
     code: 'JPC',
     name: 'Joint Parliamentary Committee',
     kind: 'india',
+    tint: 'bg-un-deep text-white',
     body: 'An ad hoc committee of the Lok Sabha and Rajya Sabha that investigates a matter of national importance, from financial irregularities to corporate misconduct.',
   },
   {
     code: 'UNCSW',
     name: 'UN Commission on the Status of Women',
     kind: 'un',
+    tint: 'bg-peach text-ink',
     body: 'The principal global body for gender equality and the empowerment of women, documenting realities and shaping standards worldwide.',
   },
   {
     code: 'IPC',
     name: 'International Press Corps',
     kind: 'press',
+    tint: 'bg-mint text-ink',
     body: 'Journalists, photographers and reporters who cover every committee, conducting interviews and publishing the story of the conference as it unfolds.',
   },
 ]

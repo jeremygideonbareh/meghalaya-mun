@@ -37,31 +37,22 @@ export function World() {
   }, [])
 
   return (
-    <section id="world" data-chapter="One world" data-world className="relative overflow-hidden bg-un py-24 text-white sm:py-32" aria-labelledby="world-title">
+    <section id="world" data-chapter="One world" data-world className="relative overflow-hidden bg-un py-16 text-white sm:py-24" aria-labelledby="world-title">
       <div className="wrap grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-6">
         <div className="relative z-10">
           <p className="kicker text-white" data-reveal>
             One world, one room
           </p>
           <h2 id="world-title" data-split="words" className="mt-5 text-[clamp(2.6rem,6vw,5.8rem)]">
-            From Shillong, delegates debate the whole planet.
+            From Shillong, young delegates take on the world’s agenda.
           </h2>
           <p className="mt-6 max-w-lg text-lg text-white" data-reveal>
             Applications arrive from across India and neighbouring countries. For three days, a college in the hills of
             Meghalaya becomes the United Nations.
           </p>
-          <dl className="mt-10 grid grid-cols-3 gap-6 border-t-2 border-white/30 pt-6" data-reveal>
-            {[
-              ['950+', 'delegates at the 6th edition'],
-              ['3+', 'nations taking part'],
-              ['12', 'districts behind MMUN'],
-            ].map(([n, l]) => (
-              <div key={l}>
-                <dt className="font-display text-[clamp(2rem,4vw,3.2rem)] leading-none font-medium">{n}</dt>
-                <dd className="mt-2 text-sm text-white">{l}</dd>
-              </div>
-            ))}
-          </dl>
+          <p className="mt-8 border-t-2 border-white/30 pt-6 font-display text-2xl sm:text-3xl" data-reveal>
+            Delegates from <span className="underline decoration-orange decoration-4 underline-offset-8">3+ nations</span>, in the heart of the Khasi Hills.
+          </p>
           <p className="mt-8 flex items-center gap-3 font-mono text-xs tracking-[0.18em] text-white uppercase">
             <span aria-hidden className="grid size-8 place-items-center rounded-full border-2 border-white/60">↔</span>
             Drag the globe to spin it
@@ -88,7 +79,7 @@ export function World() {
 export function Team() {
   const [flipped, setFlipped] = useState<string | null>(null)
   return (
-    <section id="team" data-chapter="The team" className="relative overflow-hidden bg-paper py-28 sm:py-40" aria-labelledby="team-title">
+    <section id="team" data-chapter="The team" className="relative overflow-hidden bg-paper py-20 sm:py-28" aria-labelledby="team-title">
       <div className="wrap">
         <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-end">
           <div>
@@ -110,14 +101,14 @@ export function Team() {
             const isFlipped = flipped === m.name
             const contact = contacts.find((c) => c.name === m.name)
             return (
-              <li key={m.name} data-team-card className="h-[26rem]" style={{ transitionDelay: `${i * 60}ms` }}>
+              <li key={m.name} data-team-card className="grid gap-3" style={{ transitionDelay: `${i * 60}ms` }}>
                 <button
                   type="button"
                   onClick={() => setFlipped(isFlipped ? null : m.name)}
                   aria-pressed={isFlipped}
                   data-cursor="Flip"
                   data-tilt
-                  className="group relative block size-full text-left [transform-style:preserve-3d]"
+                  className="group relative block h-[19rem] w-full text-left [transform-style:preserve-3d] sm:h-[23rem]"
                 >
                   <span
                     className={`relative block size-full rounded-[1.75rem] transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${
@@ -130,12 +121,16 @@ export function Team() {
                         <span className="font-mono text-xs tracking-[0.2em] uppercase opacity-80">{m.group}</span>
                         <Crown className="h-7 w-9 opacity-70" />
                       </span>
-                      <span aria-hidden className="font-display text-[8.5rem] leading-none font-medium tracking-[-0.06em] opacity-95 transition-transform duration-700 group-hover:-translate-y-2">
+                      <span aria-hidden className="font-display text-[5.5rem] leading-none font-medium tracking-[-0.06em] opacity-95 transition-transform duration-700 group-hover:-translate-y-2 sm:text-[7rem]">
                         {m.initials}
                       </span>
                       <span>
                         <span className="block font-display text-3xl">{m.name}</span>
                         <span className="mt-1 block font-mono text-xs tracking-[0.18em] uppercase opacity-80">{m.role}</span>
+                        <span className="mt-4 inline-flex items-center gap-2 font-mono text-xs tracking-[0.18em] uppercase opacity-80">
+                          <span aria-hidden className="grid size-7 place-items-center rounded-full border-2 border-current">↻</span>
+                          Tap to turn over
+                        </span>
                       </span>
                     </span>
                     {/* Back */}
@@ -149,9 +144,13 @@ export function Team() {
                     </span>
                   </span>
                 </button>
-                {isFlipped && contact && (
-                  <a href={`tel:${contact.tel}`} className="btn btn-orange mt-4 w-full">
-                    Call {m.name.split(' ')[0]} <Arrow className="size-4" />
+                {contact ? (
+                  <a href={`tel:${contact.tel}`} className="btn btn-line w-full">
+                    Call {m.name.split(' ')[0]} · {contact.phone} <Arrow className="size-4" />
+                  </a>
+                ) : (
+                  <a href={org.whatsappCommunity} target="_blank" rel="noopener" className="btn btn-line w-full">
+                    Ask about becoming one <Arrow className="size-4" />
                   </a>
                 )}
               </li>
@@ -180,6 +179,7 @@ export function Placard() {
   const [raised, setRaised] = useState(false)
   const card = useRef<HTMLDivElement>(null)
   const flipKey = useMemo(() => `${country}-${committee}`, [country, committee])
+  const tint = committees.find((c) => c.code === committee)?.tint ?? 'bg-pine text-white'
 
   // Pointer tilt on the placard (desktop pointers)
   useEffect(() => {
@@ -210,9 +210,9 @@ export function Placard() {
   )}`
 
   return (
-    <section id="placard" data-chapter="Your placard" className="relative overflow-hidden bg-sky py-28 sm:py-40" aria-labelledby="placard-title">
-      <div className="wrap grid items-center gap-14 lg:grid-cols-[1fr_1.15fr] lg:gap-20">
-        <div>
+    <section id="placard" data-chapter="Your placard" className="relative overflow-hidden bg-sky py-20 sm:py-28" aria-labelledby="placard-title">
+      <div className="wrap grid grid-cols-[minmax(0,1fr)] items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-20">
+        <div className="min-w-0">
           <p className="kicker text-un-deep" data-reveal>
             Try it on
           </p>
@@ -223,8 +223,8 @@ export function Placard() {
             In committee, you speak only when your placard goes up. Pick a nation and a committee, and see yours.
           </p>
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-2" data-reveal>
-            <label className="grid gap-2">
+          <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]" data-reveal>
+            <label className="grid min-w-0 gap-2">
               <span className="font-mono text-xs tracking-[0.18em] uppercase">Your nation</span>
               <select
                 value={country}
@@ -239,7 +239,7 @@ export function Placard() {
                 ))}
               </select>
             </label>
-            <label className="grid gap-2">
+            <label className="grid min-w-0 gap-2">
               <span className="font-mono text-xs tracking-[0.18em] uppercase">Committee</span>
               <select
                 value={committee}
@@ -251,7 +251,7 @@ export function Placard() {
               >
                 {committees.map((c) => (
                   <option key={c.code} value={c.code}>
-                    {c.code} · {c.name}
+                    {c.code}
                   </option>
                 ))}
               </select>
@@ -268,24 +268,24 @@ export function Placard() {
           </div>
         </div>
 
-        <div className="relative grid h-[26rem] place-items-center [perspective:1100px] sm:h-[32rem]" aria-live="polite">
+        <div className="relative grid h-[20rem] min-w-0 place-items-center [perspective:1100px] sm:h-[30rem]" aria-live="polite">
           <div
             ref={card}
             className={`placard relative w-full max-w-[34rem] transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${raised ? 'is-raised' : ''}`}
           >
-            <div key={flipKey} className="placard-face animate-[placard-in_0.8s_cubic-bezier(0.22,1,0.36,1)] overflow-hidden rounded-2xl bg-pine text-white shadow-[0_50px_80px_-40px_rgb(19_34_58/0.7)]">
+            <div key={flipKey} className={`placard-face animate-[placard-in_0.8s_cubic-bezier(0.22,1,0.36,1)] overflow-hidden rounded-2xl shadow-[0_50px_80px_-40px_rgb(19_34_58/0.7)] ${tint}`}>
               <div className="flex items-center justify-between gap-4 bg-card px-5 py-3 text-ink">
                 <span className="font-mono text-[0.7rem] tracking-[0.2em] uppercase">Meghalaya Model United Nations</span>
                 <Crown className="h-5 w-7 text-un" />
               </div>
               <div className="flex items-center gap-5 px-6 py-8 sm:px-8 sm:py-10">
                 <div className="min-w-0 flex-1">
-                  <p className="font-display text-[clamp(1.9rem,4.4vw,3.2rem)] leading-[1.02] font-medium tracking-[-0.03em] uppercase">
+                  <p className="font-display text-[clamp(1.6rem,4.4vw,3.2rem)] leading-[1.02] font-medium tracking-[-0.03em] break-words uppercase">
                     {country}
                   </p>
                   <p className="mt-3 font-mono text-sm tracking-[0.18em] uppercase opacity-85">Delegate · {committee}</p>
                 </div>
-                <Laurel className="size-20 shrink-0 text-white/90 sm:size-24" />
+                <Laurel className="size-16 shrink-0 opacity-90 sm:size-24" />
               </div>
             </div>
             {/* the tent-card fold, seen from the side */}

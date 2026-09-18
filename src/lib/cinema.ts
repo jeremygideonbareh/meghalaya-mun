@@ -113,10 +113,10 @@ function heroScroll() {
   if (!hero) return
   const media = hero.querySelector('[data-hero-media]')
   const tl = gsap.timeline({
-    scrollTrigger: { trigger: hero, start: 'top top', end: '+=120%', scrub: 0.8, pin: true },
+    scrollTrigger: { trigger: hero, start: 'top top', end: '+=80%', scrub: 0.8, pin: true },
   })
   // The frame closes into a letterbox while the title pushes towards camera.
-  tl.to(media, { clipPath: 'inset(18% 6% 18% 6% round 24px)', scale: 0.9, ease: 'none' }, 0)
+  tl.to(media, { clipPath: 'inset(10% 4% 10% 4% round 24px)', scale: 0.94, ease: 'none' }, 0)
     .to('[data-hero-title]', { scale: 1.35, yPercent: -18, autoAlpha: 0, filter: 'blur(10px)', ease: 'power1.in' }, 0)
     .to('[data-hero-fade]', { autoAlpha: 0, y: -40, stagger: 0.02, ease: 'none' }, 0)
     .to('[data-hero-shade]', { opacity: 0.85, ease: 'none' }, 0)
@@ -250,7 +250,8 @@ function committees() {
   if (!section || !track) return
   const cards = q('[data-hcard]', track)
   const bar = section.querySelector('[data-hbar]')
-  const distance = () => track.scrollWidth - window.innerWidth + 48
+  const phone = window.matchMedia('(max-width: 639px)').matches
+  const distance = () => track.scrollWidth - window.innerWidth + (phone ? 0 : 48)
 
   const tween = gsap.to(track, {
     x: () => -distance(),
@@ -262,6 +263,8 @@ function committees() {
       pin: true,
       scrub: 0.7,
       invalidateOnRefresh: true,
+      // on phones, settle on one whole card at a time
+      snap: phone ? { snapTo: 1 / (cards.length - 1), duration: { min: 0.2, max: 0.5 }, ease: 'power2.inOut' } : undefined,
     },
   })
   if (bar) gsap.fromTo(bar, { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: section, start: 'top top', end: () => `+=${distance()}`, scrub: true } })
@@ -390,7 +393,7 @@ function recognition() {
         pin: true,
         scrub: 0.7,
         onUpdate: (self) => {
-          const n = Math.min(cards.length, Math.floor(self.progress * cards.length) + 1)
+          const n = Math.min(cards.length, Math.floor(self.progress * (cards.length - 1) + 0.35) + 1)
           if (count) count.textContent = String(n).padStart(2, '0')
         },
       },
@@ -398,7 +401,7 @@ function recognition() {
     cards.forEach((card, i) => {
       if (i === 0) return
       const at = i - 1
-      tl.to(card, { yPercent: 0, autoAlpha: 1, rotate: i % 2 ? -1.5 : 1.5, duration: 1, ease: 'power2.out' }, at).to(
+      tl.set(card, { autoAlpha: 1 }, at).to(card, { yPercent: 0, rotate: i % 2 ? -1.5 : 1.5, duration: 1, ease: 'power2.out' }, at).to(
         cards[i - 1],
         { scale: 0.9, yPercent: -6, rotate: i % 2 ? 3 : -3, filter: 'brightness(0.8)', duration: 1, ease: 'power2.out' },
         at,
@@ -538,20 +541,26 @@ function cursor() {
   const dy = gsap.quickTo(dot, 'y', { duration: 0.12, ease: 'power3' })
   const rx = gsap.quickTo(ring, 'x', { duration: 0.55, ease: 'power3' })
   const ry = gsap.quickTo(ring, 'y', { duration: 0.55, ease: 'power3' })
+  const tx = gsap.quickTo(text, 'x', { duration: 0.35, ease: 'power3' })
+  const ty = gsap.quickTo(text, 'y', { duration: 0.35, ease: 'power3' })
   gsap.set([dot, ring], { xPercent: -50, yPercent: -50, autoAlpha: 1 })
   window.addEventListener('pointermove', (e) => {
     dx(e.clientX)
     dy(e.clientY)
     rx(e.clientX)
     ry(e.clientY)
+    tx(e.clientX + 22)
+    ty(e.clientY + 22)
   })
   document.addEventListener('pointerover', (e) => {
-    const t = (e.target as HTMLElement).closest<HTMLElement>('[data-cursor], a, button')
-    const label = t?.dataset.cursor ?? ''
-    gsap.to(ring, { scale: t ? (label ? 2.6 : 1.7) : 1, backgroundColor: label ? 'rgba(46,119,208,0.95)' : 'rgba(46,119,208,0)', duration: 0.35 })
-    gsap.to(dot, { scale: t ? 0 : 1, duration: 0.2 })
+    const el = e.target as HTMLElement
+    const t = el.closest<HTMLElement>('[data-cursor], a, button')
+    // no label over the header, where it would sit on the menu
+    const label = el.closest('header') ? '' : (t?.dataset.cursor ?? '')
+    gsap.to(ring, { scale: t ? 1.6 : 1, duration: 0.35 })
+    gsap.to(dot, { scale: t ? 0.6 : 1, duration: 0.2 })
     text.textContent = label
-    gsap.to(text, { autoAlpha: label ? 1 : 0, duration: 0.2 })
+    gsap.to(text, { autoAlpha: label ? 1 : 0, scale: label ? 1 : 0.6, duration: 0.25 })
   })
 }
 
@@ -603,8 +612,8 @@ function world() {
   if (existing) steer = existing.steer
   ScrollTrigger.create({
     trigger: section,
-    start: 'top 60%',
-    end: 'bottom 60%',
+    start: 'top 75%',
+    end: 'center 55%',
     scrub: true,
     onUpdate: (self) => {
       pending = gsap.parseEase('power2.inOut')(self.progress)

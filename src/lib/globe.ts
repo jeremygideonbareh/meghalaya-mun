@@ -67,7 +67,7 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
     // take the short way round, however many turns the globe has made
     const diff = ((((-HOME.lng - lambda) % 360) + 540) % 360) - 180
     const lam = lambda + diff * steerAmount
-    const ph = phi + (HOME.lat * 0.85 - phi) * steerAmount
+    const ph = phi + (HOME.lat - phi) * steerAmount
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     ctx.clearRect(0, 0, w, h)
@@ -133,10 +133,26 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
       ctx.arc(home.x, home.y, 2.4, 0, Math.PI * 2)
       ctx.fill()
       if (home.z > 0.35) {
-        ctx.font = `600 ${Math.max(12, r / 18)}px "Geist Mono Variable", monospace`
-        ctx.fillStyle = '#fffcf5'
+        // label in a pill, clear of the rings
+        const fs = Math.max(12, r / 20)
+        ctx.font = `600 ${fs}px "Geist Mono Variable", monospace`
+        const label = 'SHILLONG'
+        const tw = ctx.measureText(label).width
+        const lx = home.x + r * 0.2 + 8
+        const ly = home.y - fs * 0.9
         ctx.globalAlpha = Math.min(1, (home.z - 0.35) * 3)
-        ctx.fillText('SHILLONG', home.x + 14, home.y - 10)
+        ctx.fillStyle = '#13223a'
+        ctx.beginPath()
+        ctx.roundRect(lx - 10, ly - fs, tw + 20, fs * 1.8, fs * 0.9)
+        ctx.fill()
+        ctx.fillStyle = '#fffcf5'
+        ctx.fillText(label, lx, ly + fs * 0.35)
+        ctx.strokeStyle = 'rgba(19,34,58,0.9)'
+        ctx.lineWidth = 1.5
+        ctx.beginPath()
+        ctx.moveTo(home.x + 6, home.y)
+        ctx.lineTo(lx - 10, ly)
+        ctx.stroke()
         ctx.globalAlpha = 1
       }
     }
