@@ -5,7 +5,9 @@ import { Crown } from './ui'
 export function Chrome() {
   return (
     <>
-      <div className="grain" aria-hidden />
+      <div className="grain-wrap" aria-hidden>
+        <div className="grain" />
+      </div>
       <div aria-hidden className="fixed inset-x-0 top-0 z-[95] h-1 origin-left scale-x-0 bg-orange" data-progress />
       <Cursor />
       <Nav />

@@ -34,6 +34,7 @@ export const edition = {
   venue: 'Shillong College',
   city: 'Shillong, Meghalaya',
   status: 'Concluded',
+  next: 'The 8th edition',
 }
 
 export const theme = {
@@ -42,19 +43,19 @@ export const theme = {
       word: 'Renovar',
       meaning: 'Renewal',
       body: 'Updating institutions and policies so they can meet the crises of today.',
-      image: 'podium-address',
+      image: 'dignitaries',
     },
     {
       word: 'Renasci',
       meaning: 'Rebirth',
       body: 'Personal and collective transformation: the delegate who walks out is not the one who walked in.',
-      image: 'hands-up',
+      image: 'award-stole',
     },
     {
       word: 'Renascentia',
       meaning: 'A whole new era',
       body: 'The processes that create lasting revival, built through dialogue, diplomacy and consensus.',
-      image: 'stage-group',
+      image: 'delegate-placard',
     },
   ],
   motto: 'Think globally. Debate strategically. Act responsibly.',
@@ -142,14 +143,20 @@ export const speaker = {
   ],
 }
 
+// Every photo appears once on the page: the hero and theme chapter have
+// their own, and the gallery gets the rest.
+export const heroSlides = [
+  { image: 'refugee-challenge', alt: 'A delegate honoured on stage in front of the MUN Refugee Challenge backdrop' },
+  { image: 'podium-address', alt: 'A speaker addresses the conference from the podium' },
+  { image: 'award-certificate', alt: 'A delegate receives a certificate on stage' },
+  { image: 'stage-group', alt: 'Delegates and guests gathered on the conference stage' },
+]
+
 export const gallery: { image: string; caption: string }[] = [
   { image: 'hands-up', caption: 'A motion carries' },
-  { image: 'podium-address', caption: 'Opening address' },
-  { image: 'refugee-challenge', caption: 'MUN Refugee Challenge' },
   { image: 'placard-thailand', caption: 'Kingdom of Thailand, UNHRC' },
   { image: 'committee-room', caption: 'In committee' },
   { image: 'keynote', caption: 'From the podium' },
-  { image: 'delegate-bw', caption: 'Between sessions' },
   { image: 'rapporteur', caption: 'The rapporteur' },
   { image: 'arrival', caption: 'Guests arrive' },
   { image: 'celebration', caption: 'Closing ceremony' },
@@ -158,9 +165,12 @@ export const gallery: { image: string; caption: string }[] = [
   { image: 'placard-jpc', caption: 'JPC, in character' },
   { image: 'anthem', caption: 'Rising for the anthem' },
   { image: 'resolution', caption: 'Working papers' },
-  { image: 'award-stole', caption: 'Honoured on stage' },
   { image: 'speaker-blue', caption: 'Moderated caucus' },
-  { image: 'delegate-placard', caption: 'Point of information' },
+  { image: 'chair-guest', caption: 'Guest of the bureau' },
+  { image: 'chairs-debate', caption: 'Chairs in debate' },
+  { image: 'committee-floor', caption: 'The committee floor' },
+  { image: 'voting', caption: 'Placards up' },
+  { image: 'session', caption: 'A session in progress' },
 ]
 
 export const recognitions = [
@@ -227,6 +237,36 @@ export const awards = [
   { group: 'Ambassadors', names: ['Best Campus Ambassador', 'Most Promising Ambassador'] },
 ]
 
+// Meet the team. Names and roles come from the brochure's contact page; the
+// Campus Ambassador programme and its perks from the "CA PERKS" highlight.
+// Add more members (and photos) here as the secretariat shares them.
+export const team = [
+  {
+    name: 'Palki Kashyap',
+    role: 'Secretary General',
+    group: 'Secretariat',
+    initials: 'PK',
+    tint: 'bg-un text-white',
+    about: 'The Secretary General heads the secretariat and speaks for the conference, from committees and partners to every delegate’s experience.',
+  },
+  {
+    name: 'Md. Rezaul Islam',
+    role: 'Chef de Cabinet',
+    group: 'Secretariat',
+    initials: 'RI',
+    tint: 'bg-orange text-ink',
+    about: 'The Chef de Cabinet runs the secretariat day to day, coordinating the committees, the logistics and the team behind them.',
+  },
+  {
+    name: 'Campus Ambassadors',
+    role: 'Across Meghalaya and beyond',
+    group: 'Programme',
+    initials: 'CA',
+    tint: 'bg-pine text-white',
+    about: 'Ambassadors bring MMUN to their schools and colleges, with weekly incentives, monthly awards, custom certificates and reduced delegate fees.',
+  },
+]
+
 export const contacts = [
   { name: 'Palki Kashyap', role: 'Secretary General', phone: '+91 93659 22781', tel: '+919365922781' },
   { name: 'Md. Rezaul Islam', role: 'Chef de Cabinet', phone: '+91 75780 95386', tel: '+917578095386' },
@@ -235,12 +275,15 @@ export const contacts = [
 export const chapters = [
   { id: 'top', label: 'Prologue' },
   { id: 'manifesto', label: 'Who we are' },
+  { id: 'world', label: 'One world' },
   { id: 'theme', label: 'The theme' },
   { id: 'numbers', label: 'In numbers' },
   { id: 'committees', label: 'Committees' },
   { id: 'speaker', label: 'Guest speaker' },
+  { id: 'team', label: 'The team' },
   { id: 'frames', label: 'In frames' },
   { id: 'recognition', label: 'Recognition' },
   { id: 'partners', label: 'Partners' },
+  { id: 'placard', label: 'Your placard' },
   { id: 'join', label: 'Join' },
 ]

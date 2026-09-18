@@ -35,24 +35,43 @@ export function startCinema() {
 
     heroIntro()
     heroScroll()
-    splitReveals()
-    manifesto()
-    themeChapter()
-    counters()
-    committees()
-    speaker()
-    gallery()
-    recognition()
-    marquees()
-    wordmark()
-    reveals()
-    maskedImages()
-    chapters()
     progress()
     cursor()
-    magnets()
   })
-  return () => ctx.revert()
+
+  // The rest of the film is built in the next idle moment, so the hero's
+  // first frames never wait on it. Order matters: pins before what follows.
+  let cancelled = false
+  const rest = () => {
+    if (cancelled) return
+    ctx.add(() => {
+      splitReveals()
+      manifesto()
+      world()
+      themeChapter()
+      counters()
+      committees()
+      speaker()
+      gallery()
+      recognition()
+      marquees()
+      wordmark()
+      reveals()
+      maskedImages()
+      chapters()
+      magnets()
+      tilts()
+      numbersFlip()
+      ScrollTrigger.refresh()
+    })
+  }
+  const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 120))
+  idle(rest, { timeout: 900 })
+
+  return () => {
+    cancelled = true
+    ctx.revert()
+  }
 }
 
 // ---------------------------------------------------------------- hero
@@ -61,12 +80,12 @@ function heroIntro() {
   const hero = document.querySelector<HTMLElement>('[data-hero]')
   if (!hero) return
   const title = hero.querySelector<HTMLElement>('[data-hero-title]')
-  const split = title ? SplitText.create(title, { type: 'chars,words', mask: 'words' }) : null
+  const split = title ? SplitText.create(title, { type: 'chars,words', mask: 'words', wordsClass: 'split-word' }) : null
   const slides = q('.kb', hero)
 
   const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } })
   tl.from(slides[0] ?? [], { scale: 1.35, duration: 2.6, ease: 'power3.out' }, 0)
-    .from(split?.chars ?? [], { yPercent: 120, rotate: 8, duration: 1.3, stagger: 0.028 }, 0.25)
+    .from(split?.chars ?? [], { yPercent: 120, rotate: 8, duration: 1.3, stagger: 0.028, onComplete: () => split?.revert() }, 0.25)
     .from('[data-hero-fade]', { autoAlpha: 0, y: 30, duration: 1.1, stagger: 0.09 }, 0.8)
     .from('[data-hero-rule]', { scaleX: 0, transformOrigin: 'left center', duration: 1.4, ease: 'expo.inOut' }, 0.7)
 
@@ -108,7 +127,7 @@ function heroScroll() {
 function splitReveals() {
   q('[data-split]').forEach((el) => {
     const type = el.dataset.split === 'chars' ? 'chars,words,lines' : 'words,lines'
-    const split = SplitText.create(el, { type, mask: 'lines' })
+    const split = SplitText.create(el, { type, mask: 'lines', linesClass: 'split-line' })
     const targets = el.dataset.split === 'chars' ? split.chars : split.words
     gsap.from(targets, {
       yPercent: 115,
@@ -117,6 +136,8 @@ function splitReveals() {
       ease: 'expo.out',
       stagger: el.dataset.split === 'chars' ? 0.018 : 0.035,
       scrollTrigger: { trigger: el, start: 'top 86%', once: true },
+      // Unwrap once the line has landed so nothing stays clipped
+      onComplete: () => split.revert(),
     })
   })
 }
@@ -149,16 +170,39 @@ function themeChapter() {
     scrollTrigger: {
       trigger: section,
       start: 'top top',
-      end: `+=${panels.length * 110}%`,
+      end: `+=${(panels.length - 1) * 120 + 40}%`,
       pin: true,
       scrub: 0.8,
     },
   })
+  const first = images[0]
+  const firstPanel = panels[0]
+  gsap
+    .timeline({ scrollTrigger: { trigger: section, start: 'top 85%', end: 'top top', scrub: 0.6 } })
+    .fromTo(first, { clipPath: 'circle(8% at 50% 55%)' }, { clipPath: 'circle(75% at 50% 55%)', ease: 'power2.inOut' }, 0)
+    .fromTo(first.querySelector('img'), { scale: 1.3 }, { scale: 1.05, ease: 'none' }, 0)
+    .fromTo(
+      firstPanel.querySelector('[data-theme-word]'),
+      { autoAlpha: 0, yPercent: 40, letterSpacing: '0.35em', filter: 'blur(14px)' },
+      { autoAlpha: 1, yPercent: 0, letterSpacing: '-0.04em', filter: 'blur(0px)', ease: 'power3.out' },
+      0.35,
+    )
+    .fromTo(firstPanel.querySelectorAll('[data-theme-rest]'), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, stagger: 0.1 }, 0.6)
+
   panels.forEach((panel, i) => {
     const word = panel.querySelector('[data-theme-word]')
     const rest = panel.querySelectorAll('[data-theme-rest]')
     const img = images[i]
-    const at = i * 1.2
+    const at = i * 1.2 - 1.2
+    if (i === 0) {
+      tl.to({}, { duration: 0.35 }, 0)
+      tl.to(word, { autoAlpha: 0, yPercent: -40, filter: 'blur(10px)', duration: 0.45, ease: 'power2.in' }, 0.35).to(
+        rest,
+        { autoAlpha: 0, y: -20, duration: 0.3 },
+        0.35,
+      )
+      return
+    }
     // Each photo opens as a growing circle from the centre of the screen.
     tl.fromTo(img, { clipPath: 'circle(0% at 50% 55%)' }, { clipPath: 'circle(75% at 50% 55%)', duration: 1, ease: 'power2.inOut' }, at)
       .fromTo(img.querySelector('img'), { scale: 1.3 }, { scale: 1, duration: 1.2, ease: 'none' }, at)
@@ -282,6 +326,22 @@ function speaker() {
 // ---------------------------------------------------------------- gallery
 
 function gallery() {
+  const cols = q('[data-col-speed]')
+  if (cols.length) {
+    const skews = cols.map((c) => gsap.quickTo(c, 'skewY', { duration: 0.5, ease: 'power3.out' }))
+    let settle = 0
+    ScrollTrigger.create({
+      trigger: cols[0].parentElement,
+      start: 'top bottom',
+      end: 'bottom top',
+      onUpdate: (self) => {
+        const k = gsap.utils.clamp(-5, 5, self.getVelocity() / -400)
+        skews.forEach((set, i) => set(i % 2 ? -k : k))
+        clearTimeout(settle)
+        settle = window.setTimeout(() => skews.forEach((set) => set(0)), 160)
+      },
+    })
+  }
   q('[data-col-speed]').forEach((col) => {
     const speed = Number(col.dataset.colSpeed)
     gsap.fromTo(
@@ -311,26 +371,53 @@ function gallery() {
 // ---------------------------------------------------------------- recognition
 
 function recognition() {
-  const line = document.querySelector<SVGPathElement>('[data-draw-line]')
-  if (line) {
-    gsap.fromTo(
-      line,
-      { drawSVG: '0%' },
-      {
-        drawSVG: '100%',
-        ease: 'none',
-        scrollTrigger: { trigger: '[data-recognition]', start: 'top 70%', end: 'bottom 70%', scrub: 0.5 },
+  const section = document.querySelector<HTMLElement>('[data-stack]')
+  if (!section) return
+  const cards = q('[data-stack-card]', section)
+  const count = section.querySelector<HTMLElement>('[data-stack-count]')
+  const bar = section.querySelector('[data-stack-bar]')
+  const mm = gsap.matchMedia()
+
+  // Desktop: the section pins and the cards deal onto the pile one by one,
+  // each new card sliding up as the one beneath it sinks and tilts away.
+  mm.add(DESKTOP, () => {
+    gsap.set(cards.slice(1), { yPercent: 150, rotate: 6, autoAlpha: 0 })
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: `+=${cards.length * 70}%`,
+        pin: true,
+        scrub: 0.7,
+        onUpdate: (self) => {
+          const n = Math.min(cards.length, Math.floor(self.progress * cards.length) + 1)
+          if (count) count.textContent = String(n).padStart(2, '0')
+        },
       },
-    )
-  }
-  q('[data-pop]').forEach((el) => {
-    gsap.from(el, {
-      autoAlpha: 0,
-      x: el.dataset.pop === 'left' ? -80 : 80,
-      rotate: el.dataset.pop === 'left' ? -3 : 3,
-      duration: 1,
-      ease: 'expo.out',
-      scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+    })
+    cards.forEach((card, i) => {
+      if (i === 0) return
+      const at = i - 1
+      tl.to(card, { yPercent: 0, autoAlpha: 1, rotate: i % 2 ? -1.5 : 1.5, duration: 1, ease: 'power2.out' }, at).to(
+        cards[i - 1],
+        { scale: 0.9, yPercent: -6, rotate: i % 2 ? 3 : -3, filter: 'brightness(0.8)', duration: 1, ease: 'power2.out' },
+        at,
+      )
+    })
+    if (bar) tl.fromTo(bar, { scaleX: 0 }, { scaleX: 1, duration: cards.length - 1, ease: 'none' }, 0)
+  })
+
+  // Phones: the cards deal in from alternating sides as they arrive.
+  mm.add('(max-width: 1023px)', () => {
+    cards.forEach((card, i) => {
+      gsap.from(card, {
+        autoAlpha: 0,
+        x: i % 2 ? 70 : -70,
+        rotate: i % 2 ? 4 : -4,
+        duration: 0.9,
+        ease: 'expo.out',
+        scrollTrigger: { trigger: card, start: 'top 88%', once: true },
+      })
     })
   })
 }
@@ -481,6 +568,84 @@ function magnets() {
     el.addEventListener('pointerleave', () => {
       x(0)
       y(0)
+    })
+  })
+}
+
+// ---------------------------------------------------------------- one world
+
+/** The globe drifts in from deep space and turns to face Shillong as you scroll. */
+function world() {
+  const section = document.querySelector<HTMLElement>('[data-world]')
+  const stage = section?.querySelector<HTMLElement>('[data-world-stage]')
+  if (!section || !stage) return
+  gsap.fromTo(
+    stage,
+    { scale: 0.55, rotateY: -35, rotateX: 18, autoAlpha: 0 },
+    {
+      scale: 1,
+      rotateY: 0,
+      rotateX: 0,
+      autoAlpha: 1,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: section, start: 'top 85%', end: 'top 20%', scrub: 0.8 },
+    },
+  )
+  let steer: ((n: number) => void) | null = null
+  let pending = 0
+  const onReady = (e: Event) => {
+    steer = (e as CustomEvent).detail.steer
+    steer?.(pending)
+  }
+  window.addEventListener('globe:ready', onReady)
+  // the globe may already be up if the visitor arrived near it
+  const existing = (window as Window & { __mmunGlobe?: { steer: (n: number) => void } }).__mmunGlobe
+  if (existing) steer = existing.steer
+  ScrollTrigger.create({
+    trigger: section,
+    start: 'top 60%',
+    end: 'bottom 60%',
+    scrub: true,
+    onUpdate: (self) => {
+      pending = gsap.parseEase('power2.inOut')(self.progress)
+      steer?.(pending)
+    },
+  })
+}
+
+// ---------------------------------------------------------------- numbers
+
+/** Each figure flips up into place like a scoreboard tile. */
+function numbersFlip() {
+  const section = document.getElementById('numbers')
+  if (!section) return
+  const tiles = q('[data-flip]', section)
+  gsap.set(tiles, { transformPerspective: 900, transformOrigin: '50% 100%' })
+  ScrollTrigger.batch(tiles, {
+    start: 'top 88%',
+    once: true,
+    onEnter: (batch) => gsap.fromTo(batch, { rotateX: -80, autoAlpha: 0 }, { rotateX: 0, autoAlpha: 1, duration: 1.2, ease: 'expo.out', stagger: 0.1, overwrite: true }),
+  })
+}
+
+// ---------------------------------------------------------------- 3D tilt
+
+/** Cards and gallery tiles lean towards the pointer in 3D. */
+function tilts() {
+  if (!window.matchMedia(FINE).matches) return
+  const targets = [...q('[data-tilt]'), ...q('#frames button'), ...q('[data-spot-frame]')]
+  targets.forEach((el) => {
+    gsap.set(el, { transformPerspective: 900 })
+    const rx = gsap.quickTo(el, 'rotationX', { duration: 0.5, ease: 'power3.out' })
+    const ry = gsap.quickTo(el, 'rotationY', { duration: 0.5, ease: 'power3.out' })
+    el.addEventListener('pointermove', (e) => {
+      const r = el.getBoundingClientRect()
+      ry(((e.clientX - r.left) / r.width - 0.5) * 16)
+      rx(-((e.clientY - r.top) / r.height - 0.5) * 16)
+    })
+    el.addEventListener('pointerleave', () => {
+      rx(0)
+      ry(0)
     })
   })
 }

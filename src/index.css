@@ -98,11 +98,45 @@
   }
 }
 
-/* A light paper grain, like a printed programme */
-.grain {
+/* The delegate placard: tilts with the pointer, rises when raised */
+.placard {
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+}
+.placard.is-raised {
+  transform: translateY(-16%) rotateX(calc(var(--rx, 0deg) + 8deg)) rotateY(var(--ry, 0deg)) rotateZ(-5deg) scale(1.05);
+}
+@keyframes placard-in {
+  from {
+    transform: rotateX(-95deg);
+    opacity: 0;
+  }
+}
+
+/* No sideways scrolling, ever */
+html,
+body {
+  overflow-x: clip;
+}
+
+/* SplitText masks keep descenders (g, y, p) whole while text rises */
+.split-line-mask,
+.split-word-mask {
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+}
+
+/* A light paper grain, like a printed programme. The wrapper clips it so the
+   oversized, drifting layer can never widen the page on phones. */
+.grain-wrap {
   position: fixed;
-  inset: -50%;
+  inset: 0;
   z-index: 90;
+  overflow: hidden;
+  pointer-events: none;
+}
+.grain {
+  position: absolute;
+  inset: -50%;
   pointer-events: none;
   opacity: 0.06;
   mix-blend-mode: multiply;
@@ -211,6 +245,10 @@ html[data-motion='off'] [data-theme-panel] {
 html[data-motion='off'] [data-theme-word],
 html[data-motion='off'] [data-theme-rest] {
   opacity: 1 !important;
+}
+html[data-motion='off'] [data-stack] {
+  height: auto;
+  padding-block: 7rem;
 }
 html[data-motion='off'] [data-hscroll] {
   height: auto;

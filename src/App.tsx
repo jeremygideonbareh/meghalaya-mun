@@ -3,6 +3,7 @@ import { Committees, Frames, Join, Manifesto, Numbers, Partners, Recognition, Sp
 import { Chrome } from './components/Chrome'
 import { Footer } from './components/Footer'
 import { Hero } from './components/Hero'
+import { Placard, Team, World } from './components/Interactive'
 
 export default function App() {
   useEffect(() => {
@@ -39,13 +40,16 @@ export default function App() {
           <main>
             <Hero />
             <Manifesto />
+            <World />
             <Theme />
             <Numbers />
             <Committees />
             <Speaker />
+            <Team />
             <Frames />
             <Recognition />
             <Partners />
+            <Placard />
             <Join />
           </main>
           <Footer />

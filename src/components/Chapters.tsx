@@ -13,7 +13,10 @@ import {
   stats,
   theme,
 } from '../data/content'
+import manifest from '../data/images.json'
 import { Arrow, Chamber, Crown, Laurel, Picture, Press } from './ui'
+
+const images = manifest as Record<string, { ratio: number }>
 
 /* ------------------------------------------------------------ 02 Manifesto */
 
@@ -60,8 +63,8 @@ export function Theme() {
     <section id="theme" data-chapter="The theme" data-theme-pin className="relative h-[100svh] overflow-hidden bg-un text-white" aria-labelledby="theme-title">
       {theme.words.map((w, i) => (
         <div key={w.word} data-theme-image className="absolute inset-0 [clip-path:circle(0%_at_50%_55%)]" style={{ zIndex: i + 1 }}>
-          <Picture name={w.image} alt="" sizes="100vw" className="h-full w-full object-cover" />
-          {/* UN-blue duotone wash keeps it bright and legible */}
+          <Picture name={w.image} alt="" sizes="100vw" className="h-full w-full object-cover contrast-125 grayscale" />
+          {/* A deliberate UN-blue duotone: bright, legible, and kind to soft crops */}
           <div className="absolute inset-0 bg-un mix-blend-multiply opacity-80" />
           <div className="absolute inset-0 bg-ink/25" />
         </div>
@@ -80,7 +83,7 @@ export function Theme() {
             <p data-theme-rest className="font-mono text-sm tracking-[0.3em] text-white uppercase opacity-0">
               {String(i + 1).padStart(2, '0')} · {w.meaning}
             </p>
-            <p data-theme-word className="mt-4 font-display text-[clamp(3.6rem,15vw,15rem)] leading-none font-medium tracking-[-0.04em] opacity-0">
+            <p data-theme-word className="mt-4 font-display text-[clamp(3.2rem,13vw,15rem)] leading-[1.05] font-medium tracking-[-0.04em] opacity-0">
               {w.word}
             </p>
             <p data-theme-rest className="mx-auto mt-6 max-w-xl text-lg opacity-0 sm:text-xl">
@@ -90,7 +93,7 @@ export function Theme() {
         </div>
       ))}
 
-      <p className="absolute inset-x-0 bottom-8 z-10 text-center font-display text-lg italic sm:text-2xl">“{theme.motto}”</p>
+      <p className="absolute inset-x-0 bottom-8 z-10 px-5 text-center font-display text-lg italic sm:text-2xl">“{theme.motto}”</p>
     </section>
   )
 }
@@ -110,12 +113,12 @@ export function Numbers() {
         </h2>
         <div className="mt-16 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {stats.map((s) => (
-            <div key={s.label} data-reveal className="border-t-2 border-ink pt-6">
+            <div key={s.label} data-flip className="border-t-2 border-ink pt-6">
               <p className="font-display text-[clamp(4rem,9vw,7.5rem)] leading-none font-medium tracking-[-0.04em]">
                 <span data-count={s.value}>{s.value}</span>
-                <span className="align-top text-[0.45em] text-paper">{s.suffix}</span>
+                <span className="align-top text-[0.45em] text-ink">{s.suffix}</span>
               </p>
-              <p className="mt-3 max-w-xs font-medium text-ink/80">{s.label}</p>
+              <p className="mt-3 max-w-xs font-medium text-ink">{s.label}</p>
             </div>
           ))}
         </div>
@@ -127,8 +130,27 @@ export function Numbers() {
 /* ------------------------------------------------------------ 05 Committees */
 
 const emblem = { un: Laurel, india: Chamber, press: Press }
+// Each card gets its own colour so the eight don't read as one repeated tile.
+const cardTints = [
+  'bg-card text-ink',
+  'bg-sky text-ink',
+  'bg-orange text-ink',
+  'bg-pine text-white',
+  'bg-card text-ink',
+  'bg-ink text-white',
+  'bg-sky text-ink',
+  'bg-orange text-ink',
+]
 
 export function Committees() {
+  const [flipped, setFlipped] = useState<Set<string>>(new Set())
+  const toggle = (code: string) =>
+    setFlipped((prev) => {
+      const next = new Set(prev)
+      if (next.has(code)) next.delete(code)
+      else next.add(code)
+      return next
+    })
   return (
     <section id="committees" data-chapter="Committees" data-hscroll className="relative h-[100svh] overflow-hidden bg-un text-white" aria-labelledby="committees-title">
       <div className="wrap flex h-full flex-col justify-center gap-8 lg:gap-10">
@@ -139,32 +161,60 @@ export function Committees() {
               Three days. Eight rooms. <em className="text-white underline decoration-orange decoration-4 underline-offset-8">One world.</em>
             </h2>
           </div>
-          <p className="hidden max-w-xs text-white lg:block">Keep scrolling: the committees file past like delegations entering the hall.</p>
         </div>
 
         <div className="[perspective:1400px]">
           <div data-htrack className="flex w-max gap-5 pr-[10vw] [transform-style:preserve-3d] sm:gap-7">
             {committees.map((c, i) => {
               const Icon = emblem[c.kind]
+              const isFlipped = flipped.has(c.code)
               return (
                 <article
                   key={c.code}
                   data-hcard
-                  data-cursor="Debate"
-                  className="relative flex h-[min(62svh,30rem)] w-[min(82vw,24rem)] shrink-0 flex-col justify-between overflow-hidden rounded-[1.75rem] bg-card p-7 text-ink shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [transform-style:preserve-3d] sm:p-8"
+                  className="relative h-[min(62svh,30rem)] w-[min(82vw,24rem)] shrink-0 [transform-style:preserve-3d]"
                 >
-                  <div className="flex items-start justify-between">
-                    <Icon className={`size-16 ${c.kind === 'un' ? 'text-un' : c.kind === 'india' ? 'text-orange-deep' : 'text-pine'}`} />
-                    <span className="font-mono text-sm text-ink-soft">
-                      {String(i + 1).padStart(2, '0')} / {String(committees.length).padStart(2, '0')}
+                  <button
+                    type="button"
+                    onClick={() => toggle(c.code)}
+                    aria-pressed={isFlipped}
+                    data-cursor={isFlipped ? 'Back' : 'Flip'}
+                    className={`relative block size-full text-left transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${
+                      isFlipped ? '[transform:rotateY(180deg)]' : ''
+                    }`}
+                  >
+                    {/* Front */}
+                    <span
+                      className={`absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[1.75rem] p-7 shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [backface-visibility:hidden] sm:p-8 ${cardTints[i]}`}
+                    >
+                      <Crown aria-hidden className="pointer-events-none absolute -top-6 -right-8 w-44 opacity-[0.09]" />
+                      <span className="relative flex items-start justify-between">
+                        <Icon className="size-16" />
+                        <span className="font-mono text-sm opacity-70">
+                          {String(i + 1).padStart(2, '0')} / {String(committees.length).padStart(2, '0')}
+                        </span>
+                      </span>
+                      <span>
+                        <span className="block font-display text-[clamp(3.2rem,7vw,5rem)] leading-none font-medium tracking-[-0.04em]">{c.code}</span>
+                        <span className="mt-3 block text-lg font-bold">{c.name}</span>
+                        <span className="mt-5 inline-flex items-center gap-2 font-mono text-xs tracking-[0.18em] uppercase opacity-80">
+                          <span aria-hidden className="grid size-7 place-items-center rounded-full border-2 border-current">↻</span>
+                          Tap to turn over
+                        </span>
+                      </span>
                     </span>
-                  </div>
-                  <div>
-                    <p className="font-display text-[clamp(3.2rem,7vw,5rem)] leading-none font-medium tracking-[-0.04em] text-un">{c.code}</p>
-                    <h3 className="mt-3 font-sans text-lg font-bold tracking-normal">{c.name}</h3>
-                    <p className="mt-3 text-[0.98rem] text-ink-soft">{c.body}</p>
-                  </div>
-                  <Crown aria-hidden className="pointer-events-none absolute -right-10 -bottom-8 w-48 text-orange/15" />
+                    {/* Back */}
+                    <span className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[1.75rem] bg-ink p-7 text-white shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [backface-visibility:hidden] [transform:rotateY(180deg)] sm:p-8">
+                      <span className="flex items-center justify-between">
+                        <span className="font-display text-4xl">{c.code}</span>
+                        <Icon className="size-10 text-orange" />
+                      </span>
+                      <span className="text-lg">{c.body}</span>
+                      <span className="font-mono text-xs tracking-[0.18em] text-white/80 uppercase">
+                        {c.kind === 'un' ? 'United Nations body' : c.kind === 'india' ? 'Indian parliamentary body' : 'Press corps'}
+                      </span>
+                    </span>
+                  </button>
                 </article>
               )
             })}
@@ -222,11 +272,11 @@ export function Speaker() {
 
 export function Frames() {
   const [open, setOpen] = useState<number | null>(null)
-  const cols = [gallery.slice(0, 6), gallery.slice(6, 12), gallery.slice(12, 18)]
-  const speeds = [18, -24, 14]
+  const cols = balanced(gallery, 3)
+  const speeds = [10, -14, 8]
 
   return (
-    <section id="frames" data-chapter="In frames" className="relative overflow-hidden bg-card py-28 sm:py-40" aria-labelledby="frames-title">
+    <section id="frames" data-chapter="In frames" className="relative overflow-hidden bg-card pt-28 sm:pt-40" aria-labelledby="frames-title">
       <div className="wrap">
         <p className="kicker text-orange-deep" data-reveal>
           The 7th edition, in frames
@@ -259,13 +309,14 @@ export function Frames() {
         ))}
       </div>
 
-      {/* A film strip that runs sideways as you scroll */}
-      <div className="mt-20 overflow-hidden bg-orange-deep py-5" aria-hidden>
-        <div data-film="left" className="flex w-max gap-4">
-          {[...gallery, ...gallery].map((g, i) => (
-            <div key={i} className="relative h-40 w-60 shrink-0 overflow-hidden rounded-lg ring-4 ring-paper sm:h-48 sm:w-72">
-              <Picture name={g.image} alt="" sizes="18rem" className="h-full w-full object-cover" />
-            </div>
+      {/* The three words every MUN runs on, racing sideways with the scroll */}
+      <div className="mt-16 overflow-hidden bg-orange py-4 text-ink sm:mt-20" aria-hidden>
+        <div data-marquee="left" className="marquee">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <span key={i} className="flex items-center gap-8 pr-8 font-display text-[clamp(2.4rem,6vw,5rem)] font-medium tracking-[-0.03em] whitespace-nowrap">
+              Diplomacy <Crown className="h-7 w-9 shrink-0" /> Dialogue <Crown className="h-7 w-9 shrink-0" /> Debate
+              <Crown className="h-7 w-9 shrink-0" />
+            </span>
           ))}
         </div>
       </div>
@@ -273,6 +324,18 @@ export function Frames() {
       <Lightbox index={open} onClose={() => setOpen(null)} onMove={(d) => setOpen((i) => (i === null ? i : (i + d + gallery.length) % gallery.length))} />
     </section>
   )
+}
+
+/** Deal photos into columns so every column ends at roughly the same height. */
+function balanced<T extends { image: string }>(items: T[], n: number) {
+  const cols: T[][] = Array.from({ length: n }, () => [])
+  const heights = new Array(n).fill(0)
+  for (const item of items) {
+    const i = heights.indexOf(Math.min(...heights))
+    cols[i].push(item)
+    heights[i] += 1 / (images[item.image]?.ratio ?? 1)
+  }
+  return cols
 }
 
 function Lightbox({ index, onClose, onMove }: { index: number | null; onClose: () => void; onMove: (d: number) => void }) {
@@ -314,31 +377,49 @@ function Lightbox({ index, onClose, onMove }: { index: number | null; onClose: (
 
 /* ------------------------------------------------------------ 08 Recognition */
 
+const stackTints = ['bg-un text-white', 'bg-card text-ink', 'bg-orange text-ink', 'bg-pine text-white', 'bg-ink text-white', 'bg-card text-ink']
+
 export function Recognition() {
   return (
-    <section id="recognition" data-chapter="Recognition" data-recognition className="relative bg-sky py-28 sm:py-40" aria-labelledby="recognition-title">
-      <div className="wrap">
-        <p className="kicker text-un-deep" data-reveal>
-          Recognition
-        </p>
-        <h2 id="recognition-title" data-split="words" className="mt-5 max-w-4xl text-[clamp(2.4rem,6vw,5.6rem)]">
-          Backed by the institutions that shape public life.
-        </h2>
-
-        <div className="relative mt-20">
-          <svg aria-hidden className="absolute top-0 left-4 h-full w-8 lg:left-1/2 lg:-translate-x-1/2" viewBox="0 0 20 1000" preserveAspectRatio="none">
-            <path data-draw-line d="M10 0 C 18 160, 2 330, 10 500 S 18 840, 10 1000" stroke="#2e77d0" strokeWidth="3" fill="none" vectorEffect="non-scaling-stroke" />
-          </svg>
-          <ol className="grid gap-10 lg:gap-16">
-            {recognitions.map((r, i) => (
-              <li key={r.title} data-pop={i % 2 ? 'right' : 'left'} className={`relative pl-14 lg:w-1/2 lg:pl-0 ${i % 2 ? 'lg:ml-auto lg:pl-16' : 'lg:pr-16 lg:text-right'}`}>
-                <span aria-hidden className={`absolute top-2 left-[0.55rem] size-4 rounded-full bg-orange-deep ring-4 ring-sky lg:top-3 ${i % 2 ? 'lg:-left-2' : 'lg:right-[-0.5rem] lg:left-auto'}`} />
-                <h3 className="text-[clamp(1.6rem,3vw,2.4rem)]">{r.title}</h3>
-                <p className="mt-3 text-lg text-ink/80">{r.body}</p>
-              </li>
-            ))}
-          </ol>
+    <section id="recognition" data-chapter="Recognition" data-stack className="relative overflow-hidden bg-sky py-28 lg:h-[100svh] lg:py-0" aria-labelledby="recognition-title">
+      <div className="wrap grid h-full gap-10 lg:grid-cols-[1fr_1.25fr] lg:items-center lg:gap-16">
+        <div>
+          <p className="kicker text-un-deep" data-reveal>
+            Recognition
+          </p>
+          <h2 id="recognition-title" data-split="words" className="mt-5 text-[clamp(2.4rem,5.4vw,5.2rem)]">
+            Backed by the institutions that shape public life.
+          </h2>
+          <p className="mt-6 hidden items-center gap-4 font-mono text-sm tracking-[0.18em] uppercase lg:flex" aria-hidden>
+            <span data-stack-count className="text-un-deep">
+              01
+            </span>
+            <span className="h-[2px] w-16 bg-ink/20">
+              <span data-stack-bar className="block h-[2px] origin-left scale-x-0 bg-un-deep" />
+            </span>
+            <span>0{recognitions.length}</span>
+          </p>
         </div>
+
+        <ol data-stack-deck className="relative grid gap-5 lg:block lg:h-[min(62svh,30rem)]">
+          {recognitions.map((r, i) => (
+            <li
+              key={r.title}
+              data-stack-card
+              className={`flex flex-col justify-between gap-8 rounded-[1.75rem] p-7 shadow-[0_40px_70px_-35px_rgb(19_34_58/0.55)] sm:p-9 lg:absolute lg:inset-0 ${stackTints[i % stackTints.length]}`}
+              style={{ zIndex: i + 1 }}
+            >
+              <div className="flex items-start justify-between gap-6">
+                <span className="font-mono text-sm tracking-[0.18em] uppercase opacity-80">Recognition · 0{i + 1}</span>
+                <Crown className="h-8 w-11 shrink-0 opacity-80" />
+              </div>
+              <div>
+                <h3 className="text-[clamp(2rem,4vw,3.4rem)]">{r.title}</h3>
+                <p className="mt-4 max-w-xl text-lg opacity-90">{r.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   )
@@ -419,7 +500,7 @@ export function Join() {
 
           <div className="mt-14 grid gap-5 sm:grid-cols-2">
             {contacts.map((c) => (
-              <a key={c.name} href={`tel:${c.tel}`} data-reveal data-cursor="Call" className="group rounded-[1.25rem] bg-white/10 p-6 ring-1 ring-white/20 transition-colors hover:bg-white hover:text-ink">
+              <a key={c.name} href={`tel:${c.tel}`} data-reveal data-cursor="Call" className="group rounded-[1.25rem] border-2 border-white/30 p-6 transition-colors hover:border-white hover:bg-white hover:text-ink">
                 <p className="font-mono text-xs tracking-[0.2em] text-white/80 uppercase group-hover:text-orange-deep">{c.role}</p>
                 <p className="mt-2 font-display text-2xl">{c.name}</p>
                 <p className="mt-1 text-white/80 group-hover:text-ink-soft">{c.phone}</p>
@@ -430,7 +511,7 @@ export function Join() {
 
         <div className="grid gap-6">
           <div data-reveal className="rounded-[1.75rem] bg-orange p-8 text-ink sm:p-10">
-            <p className="font-mono text-xs tracking-[0.2em] uppercase">7th edition delegate fee</p>
+            <p className="font-mono text-xs tracking-[0.2em] uppercase">Last edition’s delegate fee</p>
             <p className="mt-3 font-display text-[clamp(4rem,9vw,6.5rem)] leading-none font-medium tracking-[-0.04em]">₹{registration.fee.toLocaleString('en-IN')}</p>
             <p className="mt-2 font-semibold">{registration.note}</p>
             <ul className="mt-6 grid gap-2">
@@ -442,7 +523,7 @@ export function Join() {
               ))}
             </ul>
           </div>
-          <ul data-reveal className="grid gap-2 rounded-[1.5rem] bg-white/10 p-6 ring-1 ring-white/20">
+          <ul data-reveal className="grid gap-2 border-t-2 border-white/30 pt-5">
             {registration.extras.map((x) => (
               <li key={x} className="flex gap-3">
                 <span aria-hidden className="text-orange">✦</span>
@@ -450,13 +531,13 @@ export function Join() {
               </li>
             ))}
           </ul>
-          <div data-reveal className="rounded-[1.5rem] bg-white p-6 text-ink">
-            <p className="font-mono text-xs tracking-[0.2em] text-orange-deep uppercase">Awards</p>
+          <div data-reveal className="border-t-2 border-white/30 pt-5">
+            <p className="font-mono text-xs tracking-[0.2em] text-white uppercase">Awards</p>
             <div className="mt-4 grid gap-4 sm:grid-cols-3">
               {awards.map((a) => (
                 <div key={a.group}>
-                  <p className="font-display text-xl text-un">{a.group}</p>
-                  <ul className="mt-1 text-sm text-ink-soft">
+                  <p className="font-display text-xl">{a.group}</p>
+                  <ul className="mt-1 text-sm text-white/85">
                     {a.names.map((n) => (
                       <li key={n}>{n}</li>
                     ))}
