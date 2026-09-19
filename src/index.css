@@ -115,6 +115,16 @@
   }
 }
 
+/* A soft light pool under the 3D crown */
+.crown-stage::before {
+  content: '';
+  position: absolute;
+  inset: 20% 25% 10%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(242 107 29 / 0.35), transparent);
+  filter: blur(30px);
+}
+
 /* No sideways scrolling, ever */
 html,
 body {
@@ -248,6 +258,29 @@ html[data-motion='off'] [data-theme-panel] {
 html[data-motion='off'] [data-theme-word],
 html[data-motion='off'] [data-theme-rest] {
   opacity: 1 !important;
+}
+html[data-motion='off'] .reel {
+  height: auto;
+  min-height: 0;
+  padding: 1.25rem;
+}
+html[data-motion='off'] .reel-stage,
+html[data-motion='off'] .reel-ring {
+  position: static;
+  transform: none !important;
+}
+html[data-motion='off'] .reel-ring {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: 1rem;
+}
+html[data-motion='off'] .reel-item {
+  position: static;
+  width: auto;
+  transform: none !important;
+}
+html[data-motion='off'] .reel-caption {
+  display: none;
 }
 html[data-motion='off'] [data-stack] {
   height: auto;

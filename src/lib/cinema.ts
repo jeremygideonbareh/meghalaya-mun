@@ -34,6 +34,7 @@ export function startCinema() {
     })
 
     heroIntro()
+    heroDepth()
     heroScroll()
     progress()
     cursor()
@@ -53,6 +54,9 @@ export function startCinema() {
       committees()
       speaker()
       gallery()
+      // pinned sections must be created in page order: the reel sits after
+      // the committees pin and before the recognition pin
+      reel()
       recognition()
       marquees()
       wordmark()
@@ -642,7 +646,7 @@ function numbersFlip() {
 /** Cards and gallery tiles lean towards the pointer in 3D. */
 function tilts() {
   if (!window.matchMedia(FINE).matches) return
-  const targets = [...q('[data-tilt]'), ...q('#frames button'), ...q('[data-spot-frame]')]
+  const targets = [...q('[data-tilt]'), ...q('[data-spot-frame]')]
   targets.forEach((el) => {
     gsap.set(el, { transformPerspective: 900 })
     const rx = gsap.quickTo(el, 'rotationX', { duration: 0.5, ease: 'power3.out' })
@@ -656,5 +660,145 @@ function tilts() {
       rx(0)
       ry(0)
     })
+  })
+}
+
+// ---------------------------------------------------------------- hero depth
+
+/** The hero separates into layers that tilt apart as the pointer moves. */
+function heroDepth() {
+  if (!window.matchMedia(`${DESKTOP} and ${FINE}`).matches) return
+  const hero = document.querySelector<HTMLElement>('[data-hero]')
+  if (!hero) return
+  const media = hero.querySelector<HTMLElement>('[data-hero-media]')
+  const title = hero.querySelector<HTMLElement>('[data-hero-title]')
+  if (!media || !title) return
+  gsap.set(hero, { perspective: 1400 })
+  const mx = gsap.quickTo(media, 'x', { duration: 1.2, ease: 'power3.out' })
+  const my = gsap.quickTo(media, 'y', { duration: 1.2, ease: 'power3.out' })
+  const mr = gsap.quickTo(media, 'rotationY', { duration: 1.2, ease: 'power3.out' })
+  const tx = gsap.quickTo(title, 'x', { duration: 0.9, ease: 'power3.out' })
+  const ty = gsap.quickTo(title, 'y', { duration: 0.9, ease: 'power3.out' })
+  const tr = gsap.quickTo(title, 'rotationX', { duration: 0.9, ease: 'power3.out' })
+  gsap.set(media, { scale: 1.06 })
+  hero.addEventListener('pointermove', (e) => {
+    const px = e.clientX / window.innerWidth - 0.5
+    const py = e.clientY / window.innerHeight - 0.5
+    mx(px * -40)
+    my(py * -26)
+    mr(px * 4)
+    tx(px * 30)
+    ty(py * 18)
+    tr(py * -8)
+  })
+}
+
+// ---------------------------------------------------------------- 3D reel
+
+/** Every photo on a turning cylinder: scroll turns it, drag spins it. */
+function reel() {
+  const box = document.querySelector<HTMLElement>('[data-reel]')
+  const ring = box?.querySelector<HTMLElement>('[data-reel-ring]')
+  const caption = box?.querySelector<HTMLElement>('[data-reel-caption]')
+  if (!box || !ring) return
+  const items = q('[data-reel-item]', ring)
+  const n = items.length
+  const step = 360 / n
+  let radius = 0
+  let scrollAngle = 0
+  let dragAngle = 0
+  let front = -1
+
+  const layout = () => {
+    const w = items[0].offsetWidth
+    radius = Math.round(w / 2 / Math.tan(Math.PI / n)) + 24
+    items.forEach((it, i) => {
+      it.style.transform = `translate(-50%, -50%) rotateY(${i * step}deg) translateZ(${radius}px)`
+    })
+    apply()
+  }
+
+  const apply = () => {
+    const angle = scrollAngle + dragAngle
+    ring.style.transform = `translateZ(${-radius}px) rotateX(-6deg) rotateY(${angle}deg)`
+    // light the photos facing us, dim the ones turning away
+    let best = 0
+    let bestI = 0
+    items.forEach((it, i) => {
+      const a = ((i * step + angle) * Math.PI) / 180
+      const facing = Math.cos(a)
+      it.style.opacity = String(0.18 + 0.82 * Math.max(0, facing))
+      it.style.filter = facing > 0.92 ? 'none' : `saturate(${0.4 + 0.6 * Math.max(0, facing)})`
+      if (facing > best) {
+        best = facing
+        bestI = i
+      }
+    })
+    if (caption && bestI !== front) {
+      front = bestI
+      caption.textContent = (items[bestI].querySelector('img')?.getAttribute('alt') ?? '').trim()
+    }
+  }
+
+  layout()
+  window.addEventListener('resize', layout)
+
+  // Scroll: pin the reel and turn it once round
+  ScrollTrigger.create({
+    trigger: box,
+    start: 'center center',
+    end: '+=160%',
+    pin: true,
+    scrub: 0.6,
+    onUpdate: (self) => {
+      scrollAngle = -self.progress * (360 - step)
+      apply()
+    },
+  })
+
+  // Drag: spin with inertia on top of the scroll angle
+  let dragging = false
+  let lastX = 0
+  let startX = 0
+  let v = 0
+  let raf = 0
+  const coast = () => {
+    v *= 0.94
+    dragAngle += v
+    apply()
+    if (Math.abs(v) > 0.05) raf = requestAnimationFrame(coast)
+  }
+  box.addEventListener('pointerdown', (e) => {
+    dragging = true
+    startX = lastX = e.clientX
+    v = 0
+    box.dataset.dragged = '0'
+    cancelAnimationFrame(raf)
+  })
+  window.addEventListener('pointermove', (e) => {
+    if (!dragging) return
+    const dx = e.clientX - lastX
+    lastX = e.clientX
+    v = dx * 0.25
+    dragAngle += v
+    if (Math.abs(e.clientX - startX) > 6) box.dataset.dragged = '1'
+    apply()
+  })
+  window.addEventListener('pointerup', () => {
+    if (!dragging) return
+    dragging = false
+    raf = requestAnimationFrame(coast)
+    // let the click handler see the drag flag, then clear it
+    setTimeout(() => (box.dataset.dragged = '0'), 50)
+  })
+
+  // A slow idle turn so it's alive before anyone touches it (only while on screen)
+  let onScreen = false
+  ScrollTrigger.create({ trigger: box, start: 'top bottom', end: 'bottom top', onToggle: (self) => (onScreen = self.isActive) })
+  gsap.ticker.add(() => {
+    if (onScreen && !dragging && Math.abs(v) < 0.05) {
+      dragAngle -= 0.05
+      apply()
+    }
   })
 }

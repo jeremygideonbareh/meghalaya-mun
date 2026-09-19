@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import {
   awards,
   committees,
@@ -13,10 +14,9 @@ import {
   stats,
   theme,
 } from '../data/content'
-import manifest from '../data/images.json'
+import { CrownStage } from './CrownStage'
 import { Arrow, Chamber, Crown, Laurel, Picture, Press } from './ui'
 
-const images = manifest as Record<string, { ratio: number }>
 
 /* ------------------------------------------------------------ 02 Manifesto */
 
@@ -262,13 +262,11 @@ export function Speaker() {
 
 export function Frames() {
   const [open, setOpen] = useState<number | null>(null)
-  const cols = balanced(gallery, 3)
-  const speeds = [10, -14, 8]
 
   return (
-    <section id="frames" data-chapter="In frames" className="relative overflow-hidden bg-card pt-20 sm:pt-28" aria-labelledby="frames-title">
+    <section id="frames" data-chapter="In frames" className="relative overflow-hidden bg-sky pt-20 sm:pt-28" aria-labelledby="frames-title">
       <div className="wrap">
-        <p className="kicker text-orange-deep" data-reveal>
+        <p className="kicker text-un-deep" data-reveal>
           The 7th edition, in frames
         </p>
         <h2 id="frames-title" data-split="words" className="mt-5 max-w-4xl text-[clamp(2.4rem,6.5vw,6rem)]">
@@ -276,27 +274,35 @@ export function Frames() {
         </h2>
       </div>
 
-      <div className="wrap mt-16 grid grid-cols-2 gap-3 overflow-hidden sm:gap-5 lg:grid-cols-3">
-        {cols.map((col, c) => (
-          <div key={c} data-col-speed={speeds[c]} className={`grid content-start gap-3 sm:gap-5 ${c === 2 ? 'hidden lg:grid' : ''}`}>
-            {col.map((g) => {
-              const index = gallery.indexOf(g)
-              return (
-                <button key={g.image} type="button" onClick={() => setOpen(index)} data-cursor="View" className="group relative block overflow-hidden rounded-[1.25rem] text-left">
-                  <Picture
-                    name={g.image}
-                    alt={g.caption}
-                    sizes="(min-width: 1024px) 30vw, 46vw"
-                    className="w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.07]"
-                  />
-                  <span className="absolute bottom-3 left-3 translate-y-2 rounded-full bg-paper px-3 py-1.5 text-sm font-bold opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                    {g.caption}
-                  </span>
-                </button>
-              )
-            })}
+      {/* A 3D reel of every photo: scroll turns it, drag spins it, tap opens one */}
+      <div data-reel className="reel relative mt-10 h-[78svh] min-h-[30rem] touch-pan-y select-none sm:mt-14">
+        <div className="reel-stage absolute inset-0 [perspective:1300px]">
+          <div data-reel-ring className="reel-ring absolute top-1/2 left-1/2 [transform-style:preserve-3d]">
+            {gallery.map((g, i) => (
+              <button
+                key={g.image}
+                type="button"
+                data-reel-item
+                onClick={(e) => {
+                  if ((e.currentTarget.closest('[data-reel]') as HTMLElement)?.dataset.dragged === '1') return
+                  setOpen(i)
+                }}
+                data-cursor="View"
+                className="reel-item absolute top-0 left-0 block w-[44vw] overflow-hidden rounded-[1.25rem] bg-ink text-left shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [backface-visibility:visible] sm:w-[19rem] lg:w-[21rem]"
+              >
+                <Picture name={g.image} alt={g.caption} sizes="(min-width: 1024px) 21rem, 44vw" className="aspect-[3/4] w-full object-cover" />
+              </button>
+            ))}
           </div>
-        ))}
+        </div>
+        <p className="reel-caption pointer-events-none absolute inset-x-0 bottom-6 z-10 text-center" aria-live="polite">
+          <span data-reel-caption className="inline-block rounded-full bg-ink px-5 py-2 font-mono text-sm tracking-[0.16em] text-white uppercase">
+            {gallery[0].caption}
+          </span>
+        </p>
+        <p className="pointer-events-none absolute top-4 right-5 font-mono text-xs tracking-[0.18em] text-ink uppercase sm:right-8">
+          Scroll or drag to turn
+        </p>
       </div>
 
       {/* The three words every MUN runs on, racing sideways with the scroll */}
@@ -316,18 +322,6 @@ export function Frames() {
   )
 }
 
-/** Deal photos into columns so every column ends at roughly the same height. */
-function balanced<T extends { image: string }>(items: T[], n: number) {
-  const cols: T[][] = Array.from({ length: n }, () => [])
-  const heights = new Array(n).fill(0)
-  for (const item of items) {
-    const i = heights.indexOf(Math.min(...heights))
-    cols[i].push(item)
-    heights[i] += 1 / (images[item.image]?.ratio ?? 1)
-  }
-  return cols
-}
-
 function Lightbox({ index, onClose, onMove }: { index: number | null; onClose: () => void; onMove: (d: number) => void }) {
   useEffect(() => {
     if (index === null) return
@@ -342,7 +336,9 @@ function Lightbox({ index, onClose, onMove }: { index: number | null; onClose: (
 
   if (index === null) return null
   const g = gallery[index]
-  return (
+  // Rendered at the page root: inside the pinned, transformed section a
+  // fixed overlay would be positioned against the section, not the screen.
+  return createPortal(
     <div role="dialog" aria-modal="true" aria-label={g.caption} className="fixed inset-0 z-[130] grid place-items-center bg-un/95 p-5 text-white" onClick={onClose}>
       <figure className="max-h-full max-w-5xl animate-[lightbox_0.5s_cubic-bezier(0.22,1,0.36,1)]" onClick={(e) => e.stopPropagation()}>
         <Picture name={g.image} alt={g.caption} sizes="90vw" eager className="max-h-[78svh] w-auto rounded-2xl object-contain" />
@@ -362,6 +358,8 @@ function Lightbox({ index, onClose, onMove }: { index: number | null; onClose: (
         </figcaption>
       </figure>
     </div>
+    ,
+    document.body,
   )
 }
 
@@ -465,7 +463,8 @@ export function Partners() {
 
 export function Join() {
   return (
-    <section id="join" data-chapter="Join" className="relative overflow-hidden bg-pine py-28 text-white sm:py-40" aria-labelledby="join-title">
+    <section id="join" data-chapter="Join" className="relative overflow-hidden bg-pine pb-20 text-white sm:pb-28" aria-labelledby="join-title">
+      <CrownStage />
       <div className="wrap relative grid gap-14 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
         <div>
           <p className="kicker text-white" data-reveal>

@@ -40,10 +40,11 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
   let t = 0
 
   const resize = () => {
-    const rect = canvas.getBoundingClientRect()
+    // Layout size, not getBoundingClientRect: the fly-in scales the stage, and
+    // a transformed measurement would leave the globe small and blurry.
     dpr = Math.min(2, window.devicePixelRatio || 1)
-    w = rect.width
-    h = rect.height
+    w = canvas.clientWidth
+    h = canvas.clientHeight
     canvas.width = Math.round(w * dpr)
     canvas.height = Math.round(h * dpr)
     r = Math.min(w, h) * 0.46
