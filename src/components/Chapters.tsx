@@ -86,7 +86,7 @@ export function Theme() {
             <p data-theme-word className="mt-4 font-display text-[clamp(3.2rem,13vw,15rem)] leading-[1.05] font-medium tracking-[-0.04em] opacity-0">
               {w.word}
             </p>
-            <p data-theme-rest className="mx-auto mt-6 max-w-xl text-lg opacity-0 [text-shadow:0_1px_14px_rgb(19_34_58/0.8)] sm:text-xl">
+            <p data-theme-rest className="mx-auto mt-6 max-w-xl rounded-2xl bg-ink/50 p-4 text-lg opacity-0 backdrop-blur-sm [text-shadow:0_1px_14px_rgb(19_34_58/0.8)] sm:bg-transparent sm:p-0 sm:text-xl sm:backdrop-blur-none">
               {w.body}
             </p>
           </div>
@@ -224,7 +224,7 @@ export function Committees() {
 
 export function Speaker() {
   return (
-    <section id="speaker" data-chapter="Guest speaker" data-spotlight className="relative overflow-hidden bg-paper pt-16 pb-20 sm:pt-20 sm:pb-24">
+    <section id="speaker" data-chapter="Guest speaker" data-spotlight className="relative overflow-hidden bg-paper pt-10 pb-20 sm:pt-20 sm:pb-24">
       <div
         data-spot-light
         aria-hidden
@@ -276,7 +276,7 @@ export function Frames() {
       </div>
 
       {/* A 3D reel of every photo: scroll turns it, drag spins it, tap opens one */}
-      <div data-reel className="reel relative mt-6 h-[62svh] min-h-[26rem] sm:mt-10 sm:h-[70svh] sm:min-h-[30rem] touch-pan-y select-none">
+      <div data-reel className="reel relative mt-2 h-[50svh] min-h-[22rem] sm:mt-6 sm:h-[62svh] sm:min-h-[30rem] touch-pan-y select-none">
         <div className="reel-stage absolute inset-0 [perspective:1300px]">
           <div data-reel-ring className="reel-ring absolute top-1/2 left-1/2 [transform-style:preserve-3d]">
             {gallery.map((g, i) => (

@@ -391,16 +391,16 @@ function recognition() {
   // each new card sliding up as the one beneath it sinks and tilts away.
   mm.add(DESKTOP, () => {
     gsap.set(cards.slice(1), { yPercent: 150, rotate: 6, autoAlpha: 0 })
-    const BEAT = 1.7 // one second of motion, then a rest while the card is read
+    const BEAT = 2.3 // one second of motion, then a longer rest while the card is read
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: `+=${cards.length * 55}%`,
+        end: `+=${cards.length * 70}%`,
         pin: true,
         scrub: 0.7,
         onUpdate: (self) => {
-          const n = Math.min(cards.length, Math.floor((self.progress * tl.duration() + 0.9) / BEAT) + 1)
+          const n = Math.min(cards.length, Math.floor((self.progress * tl.duration() + 1.2) / BEAT) + 1)
           if (count) count.textContent = String(n).padStart(2, '0')
         },
       },
