@@ -46,7 +46,7 @@ function Nav() {
 
   return (
     <>
-      <header className="pointer-events-none fixed inset-x-0 top-0 z-[100]">
+      <header className="pointer-events-none fixed inset-x-0 top-0 z-[100] max-sm:bg-[linear-gradient(180deg,rgb(19_34_58/0.28),rgb(19_34_58/0))]">
         <div className="wrap flex items-center justify-between py-4 sm:py-5">
           <a
             href="#top"
@@ -78,7 +78,7 @@ function Nav() {
               onClick={() => setOpen(true)}
               aria-expanded={open}
               aria-controls="menu"
-              className="flex min-h-11 min-w-11 items-center justify-center gap-3 rounded-full bg-un px-3.5 text-sm font-bold min-[400px]:px-5 tracking-[0.2em] text-white uppercase shadow-[0_6px_24px_-12px_rgb(19_34_58/0.6)] transition-colors hover:bg-ink"
+              className="flex min-h-11 min-w-11 items-center justify-center gap-3 rounded-full bg-ink px-3.5 text-sm font-bold min-[400px]:px-5 tracking-[0.2em] text-white uppercase shadow-[0_6px_24px_-12px_rgb(19_34_58/0.6)] transition-colors hover:bg-un"
               data-cursor="Open"
             >
               <span className="max-[399px]:sr-only">Menu</span>

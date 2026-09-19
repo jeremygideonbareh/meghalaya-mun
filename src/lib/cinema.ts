@@ -218,7 +218,7 @@ function themeChapter() {
         { autoAlpha: 1, yPercent: 0, letterSpacing: '-0.02em', filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' },
         at + 0.15,
       )
-      .fromTo(rest, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.1 }, at + 0.45)
+      .fromTo(rest, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.35, stagger: 0.05 }, at + 0.25)
     if (i < panels.length - 1) {
       tl.to(word, { autoAlpha: 0, yPercent: -40, filter: 'blur(10px)', duration: 0.45, ease: 'power2.in' }, at + 1.05).to(
         rest,
@@ -390,8 +390,8 @@ function recognition() {
   // Desktop: the section pins and the cards deal onto the pile one by one,
   // each new card sliding up as the one beneath it sinks and tilts away.
   mm.add(DESKTOP, () => {
-    gsap.set(cards, { filter: 'brightness(1)' })
     gsap.set(cards.slice(1), { yPercent: 150, rotate: 6, autoAlpha: 0 })
+    const BEAT = 1.7 // one second of motion, then a rest while the card is read
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
@@ -400,21 +400,23 @@ function recognition() {
         pin: true,
         scrub: 0.7,
         onUpdate: (self) => {
-          const n = Math.min(cards.length, Math.floor(self.progress * (cards.length - 1) + 0.35) + 1)
+          const n = Math.min(cards.length, Math.floor((self.progress * tl.duration() + 0.9) / BEAT) + 1)
           if (count) count.textContent = String(n).padStart(2, '0')
         },
       },
     })
     cards.forEach((card, i) => {
       if (i === 0) return
-      const at = i - 1
+      const at = (i - 1) * BEAT + 0.4
       tl.set(card, { autoAlpha: 1 }, at).to(card, { yPercent: 0, rotate: 0, duration: 1, ease: 'power2.out' }, at).to(
         cards[i - 1],
-        { scale: 0.9, yPercent: -6, rotate: i % 2 ? 3 : -3, filter: 'brightness(0.85)', duration: 1, ease: 'power2.out' },
+        { scale: 0.9, yPercent: -6, rotate: i % 2 ? 3 : -3, duration: 1, ease: 'power2.out' },
         at,
       )
     })
-    if (bar) tl.fromTo(bar, { scaleX: 0 }, { scaleX: 1, duration: cards.length - 1, ease: 'none' }, 0)
+    // hold on the last card before the pin lets go
+    tl.to({}, { duration: 0.7 })
+    if (bar) tl.fromTo(bar, { scaleX: 0 }, { scaleX: 1, duration: tl.duration(), ease: 'none' }, 0)
   })
 
   // Phones: the cards deal in from alternating sides as they arrive.

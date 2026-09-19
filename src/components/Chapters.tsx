@@ -80,13 +80,13 @@ export function Theme() {
       {theme.words.map((w, i) => (
         <div key={w.word} data-theme-panel className="absolute inset-0 z-10 grid place-items-center px-5 text-center">
           <div>
-            <p data-theme-rest className="font-mono text-sm tracking-[0.3em] text-white uppercase opacity-0">
+            <p data-theme-rest className="inline-block rounded-full bg-ink/55 px-4 py-1.5 font-mono text-sm tracking-[0.3em] text-white uppercase opacity-0 backdrop-blur-sm">
               {String(i + 1).padStart(2, '0')} · {w.meaning}
             </p>
             <p data-theme-word className="mt-4 font-display text-[clamp(3.2rem,13vw,15rem)] leading-[1.05] font-medium tracking-[-0.04em] opacity-0">
               {w.word}
             </p>
-            <p data-theme-rest className="mx-auto mt-6 max-w-xl text-lg opacity-0 sm:text-xl">
+            <p data-theme-rest className="mx-auto mt-6 max-w-xl text-lg opacity-0 [text-shadow:0_1px_14px_rgb(19_34_58/0.8)] sm:text-xl">
               {w.body}
             </p>
           </div>
@@ -228,7 +228,7 @@ export function Speaker() {
       <div
         data-spot-light
         aria-hidden
-        className="pointer-events-none absolute top-0 left-0 size-[38rem] rounded-full bg-[radial-gradient(circle,rgb(207_226_245/0.95)_0%,transparent_65%)]"
+        className="pointer-events-none absolute top-0 left-0 size-[38rem] rounded-full max-lg:hidden bg-[radial-gradient(circle,rgb(207_226_245/0.95)_0%,transparent_65%)]"
       />
       <div className="wrap relative grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
         <div data-spot-frame className="relative overflow-hidden rounded-[1.75rem]" data-cursor="UNODC">
@@ -276,7 +276,7 @@ export function Frames() {
       </div>
 
       {/* A 3D reel of every photo: scroll turns it, drag spins it, tap opens one */}
-      <div data-reel className="reel relative mt-6 h-[62svh] min-h-[26rem] sm:mt-14 sm:h-[78svh] sm:min-h-[30rem] touch-pan-y select-none">
+      <div data-reel className="reel relative mt-6 h-[62svh] min-h-[26rem] sm:mt-10 sm:h-[70svh] sm:min-h-[30rem] touch-pan-y select-none">
         <div className="reel-stage absolute inset-0 [perspective:1300px]">
           <div data-reel-ring className="reel-ring absolute top-1/2 left-1/2 [transform-style:preserve-3d]">
             {gallery.map((g, i) => (
