@@ -38,6 +38,8 @@ const motionOn = () => typeof document !== 'undefined' && document.documentEleme
 export function Team() {
   const [filter, setFilter] = useState<Filter>('all')
   const [query, setQuery] = useState('')
+  const [open, setOpen] = useState(false)
+  const section = useRef<HTMLElement>(null)
   const grid = useRef<HTMLUListElement>(null)
   const tabs = useRef<HTMLDivElement>(null)
   const pill = useRef<HTMLSpanElement>(null)
@@ -99,7 +101,7 @@ export function Team() {
     if (!box || !p || !active) return
     p.style.width = `${active.offsetWidth}px`
     p.style.transform = `translateX(${active.offsetLeft}px)`
-  }, [filter])
+  }, [filter, open])
 
   // Cards open as they arrive (see .member-frame in index.css), and their
   // photos bloom into colour while they cross the middle of the screen.
@@ -160,10 +162,24 @@ export function Team() {
     return () => window.removeEventListener('resize', mark)
   }, [shown])
 
+  // The roster unfolds on CSS grid rows; once it settles, the pinned chapters
+  // further down the page need their positions measured again.
+  const toggleOpen = () => {
+    const next = !open
+    setOpen(next)
+    if (!next) section.current?.scrollIntoView({ behavior: motionOn() ? 'smooth' : 'auto', block: 'start' })
+    window.setTimeout(async () => {
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      ScrollTrigger.refresh()
+    }, 1150)
+  }
+
+  const faces = team.filter((m) => m.photo)
+
   const count = (f: Filter) => (f === 'all' ? team.length : team.filter((m) => m.council === f).length)
 
   return (
-    <section id="team" data-chapter="The team" className="relative overflow-hidden bg-paper pb-20 sm:pb-28" aria-labelledby="team-title">
+    <section ref={section} id="team" data-chapter="The team" className="relative overflow-hidden bg-paper pb-20 sm:pb-28" aria-labelledby="team-title">
       {/* A roll call of every name, running the width of the page */}
       <div className="overflow-hidden bg-un py-4 text-paper" aria-hidden>
         <div data-marquee="left" className="marquee">
@@ -192,8 +208,37 @@ export function Team() {
           </p>
         </div>
 
+        {/* Closed: a stack of faces and one button. Open: the faces spread and the roster unfolds. */}
+        <div className={`team-door mt-12 flex flex-col gap-6 rounded-[2rem] border-2 border-ink bg-card p-5 shadow-[6px_6px_0_var(--color-ink)] sm:flex-row sm:items-center sm:justify-between sm:p-6 ${open ? 'is-open' : ''}`} data-reveal>
+          <div className="flex items-center overflow-hidden py-2 pl-3" aria-hidden>
+            {faces.map((m, i) => (
+              <span key={m.name} className="team-face relative -ml-3 block size-12 shrink-0 overflow-hidden rounded-full border-2 border-ink bg-ink sm:size-14" style={{ '--i': i, zIndex: faces.length - i } as React.CSSProperties}>
+                <Picture name={m.photo!} alt="" sizes="56px" className="h-full w-full object-cover" />
+              </span>
+            ))}
+            <span className="team-face relative -ml-3 grid size-12 shrink-0 place-items-center rounded-full border-2 border-ink bg-orange font-mono text-xs font-bold sm:size-14" style={{ '--i': faces.length } as React.CSSProperties}>
+              +{team.length - faces.length}
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={toggleOpen}
+            aria-expanded={open}
+            aria-controls="team-roster"
+            data-magnet
+            className="btn btn-blue shrink-0 gap-3 self-start px-7 sm:self-auto"
+          >
+            {open ? 'Close the team' : `Meet all ${team.length}`}
+            <span aria-hidden className={`grid size-6 place-items-center rounded-full bg-paper text-ink transition-transform duration-500 ${open ? 'rotate-45' : ''}`}>
+              +
+            </span>
+          </button>
+        </div>
+
+        <div id="team-roster" className={`team-fold ${open ? 'is-open' : ''}`} inert={!open}>
+        <div className="min-h-0 overflow-hidden">
         {/* Controls: council tabs with a sliding highlight, and a search */}
-        <div className="mt-12 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between" data-reveal>
+        <div className="mt-10 flex flex-col gap-4 px-1 pb-2 lg:flex-row lg:items-center lg:justify-between">
           <div className="-mx-5 overflow-x-auto px-5 pb-1 [mask-image:linear-gradient(90deg,#000_85%,transparent)] sm:mx-0 sm:px-0 sm:[mask-image:none]">
             <div ref={tabs} role="group" aria-label="Filter by council" className="relative flex w-max gap-1 rounded-full border-2 border-ink bg-card p-1 shadow-[4px_4px_0_var(--color-ink)]">
               <span ref={pill} aria-hidden className="absolute top-1 bottom-1 left-0 rounded-full bg-ink transition-[transform,width] duration-500 ease-[cubic-bezier(0.34,1.4,0.64,1)]" />
@@ -253,6 +298,14 @@ export function Team() {
             </button>
           </div>
         )}
+
+        <div className="mt-12 flex justify-center">
+          <button type="button" onClick={toggleOpen} className="btn btn-line" tabIndex={open ? 0 : -1}>
+            Close the team <span aria-hidden>↑</span>
+          </button>
+        </div>
+        </div>
+        </div>
       </div>
     </section>
   )
@@ -323,7 +376,7 @@ function MemberCard({ m, hidden }: { m: Member; hidden: boolean }) {
           </a>
         ) : (
           m.lead && (
-            <a href={`mailto:${org.email}?subject=${encodeURIComponent(`For ${m.name}, ${m.role}`)}`} className="member-cta btn btn-line mt-4 w-full" data-magnet>
+            <a href={`mailto:${org.email}?subject=${encodeURIComponent(`For ${m.name}, ${m.role}`)}`} className="member-cta btn btn-line mt-4 w-full max-sm:hidden" data-magnet>
               Write to {m.callName ?? firstName(m.name)} <Arrow className="size-4" />
             </a>
           )

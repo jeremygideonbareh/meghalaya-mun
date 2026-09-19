@@ -280,7 +280,7 @@ export const team: Member[] = [
   { name: 'Eddy Ripnar', role: 'Director of Finance', also: 'Project Manager, MeghMUN Association', council: 'executive' },
   { name: 'Senrita Raksam Marak', role: 'Regional Director, Garo Hills', council: 'executive', photo: 'team-senrita-marak' },
   { name: 'Ibalarishisha Syiem', role: 'Joint Regional Director, Jaintia Hills & Ri-Bhoi', also: 'Project Manager, MeghMUN Association', council: 'executive' },
-  { name: 'Taiwan Ch. Changma', role: 'Deputy Regional Director, Garo Hills', council: 'executive', photo: 'team-taiwan-sangma' },
+  { name: 'Taiwan Ch. Sangma', role: 'Deputy Regional Director, Garo Hills', council: 'executive', photo: 'team-taiwan-sangma' },
   { name: 'Arrick Uzail Dkhar', role: 'Senior USG, Conference Outreach', council: 'executive', photo: 'team-arrick-dkhar' },
   { name: 'Wanshanbok K. Marak', role: 'Senior USG, Conference Operations', council: 'executive', photo: 'team-wanshanbok-marak' },
 
