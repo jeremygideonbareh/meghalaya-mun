@@ -117,17 +117,19 @@ export function Team() {
           if (!e.isIntersecting) return
           const el = e.target as HTMLElement
           const col = Number(el.dataset.col ?? 0)
-          el.style.setProperty('--delay', `${col * 70}ms`)
+          el.style.setProperty('--delay', `${col * 50}ms`)
           el.classList.add('is-in')
           rise.unobserve(el)
         }),
-      { rootMargin: '0px 0px -8% 0px' },
+      { rootMargin: '0px 0px 15% 0px' },
     )
     const lit = new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle('is-lit', e.isIntersecting)), {
       rootMargin: '-38% 0px -38% 0px',
     })
+    // anything already scrolled past (a jump from the menu) arrives at once
     cards.forEach((c) => {
-      rise.observe(c)
+      if (c.getBoundingClientRect().bottom < 0) c.classList.add('is-in')
+      else rise.observe(c)
       lit.observe(c)
     })
     return () => {
@@ -306,9 +308,11 @@ function MemberCard({ m, hidden }: { m: Member; hidden: boolean }) {
           <div className="member-plate relative mx-2 -mt-7 rounded-xl border-2 border-ink bg-card shadow-[0_4px_0_var(--color-ink)]">
             <span aria-hidden className={`block h-1.5 rounded-t-[0.6rem] ${t.band}`} />
             <div className="px-3 pt-2 pb-3 sm:px-4">
-              <p className="font-display text-[1.05rem] leading-[1.1] font-semibold tracking-[-0.01em] uppercase sm:text-lg">{m.name}</p>
-              <p className="mt-1 font-mono text-[0.66rem] leading-snug tracking-[0.08em] text-ink-soft uppercase sm:text-[0.7rem]">{m.role}</p>
-              {m.also && <p className="mt-0.5 font-mono text-[0.62rem] leading-snug tracking-[0.06em] text-ink-soft/85 uppercase">{m.also}</p>}
+              <p className="font-display text-[clamp(0.95rem,1.3vw,1.1rem)] leading-[1.1] font-semibold tracking-[-0.01em] [overflow-wrap:anywhere] uppercase">{m.name}</p>
+              <p className="mt-1 line-clamp-2 min-h-[2.5em] font-mono text-[0.72rem] leading-[1.25] tracking-[0.04em] text-ink-soft uppercase" title={m.also ? `${m.role} · ${m.also}` : m.role}>
+                {m.role}
+                {m.also && <span className="sr-only"> · {m.also}</span>}
+              </p>
             </div>
           </div>
         </div>

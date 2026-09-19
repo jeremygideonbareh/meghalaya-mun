@@ -221,10 +221,10 @@ function themeChapter() {
       .fromTo(
         word,
         { autoAlpha: 0, yPercent: 40, letterSpacing: '0.35em', filter: 'blur(14px)' },
-        { autoAlpha: 1, yPercent: 0, letterSpacing: '-0.02em', filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' },
-        at + 0.15,
+        { autoAlpha: 1, yPercent: 0, letterSpacing: '-0.02em', filter: 'blur(0px)', duration: 0.75, ease: 'power3.out' },
+        at + 0.32,
       )
-      .fromTo(rest, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.35, stagger: 0.05 }, at + 0.25)
+      .fromTo(rest, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.35, stagger: 0.05 }, at + 0.4)
     if (i < panels.length - 1) {
       tl.to(word, { autoAlpha: 0, yPercent: -40, filter: 'blur(10px)', duration: 0.45, ease: 'power2.in' }, at + 1.05).to(
         rest,
@@ -402,7 +402,7 @@ function recognition() {
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: `+=${cards.length * 70}%`,
+        end: `+=${cards.length * 48}%`,
         pin: true,
         scrub: 0.7,
         onUpdate: (self) => {

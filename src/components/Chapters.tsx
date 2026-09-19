@@ -265,7 +265,7 @@ export function Frames() {
   const [open, setOpen] = useState<number | null>(null)
 
   return (
-    <section id="frames" data-chapter="In frames" className="relative overflow-hidden bg-sky pt-20 sm:pt-28" aria-labelledby="frames-title">
+    <section id="frames" data-chapter="In frames" className="relative overflow-hidden bg-sky border-t-2 border-ink pt-20 sm:pt-28" aria-labelledby="frames-title">
       <div className="wrap">
         <p className="kicker text-un-deep" data-reveal>
           The 7th edition, in frames
@@ -366,25 +366,25 @@ function Lightbox({ index, onClose, onMove }: { index: number | null; onClose: (
 
 /* ------------------------------------------------------------ 08 Recognition */
 
-const stackTints = ['bg-un text-white', 'bg-card text-ink', 'bg-orange text-ink', 'bg-pine text-white', 'bg-ink text-white', 'bg-card text-ink']
+const stackTints = ['bg-un text-white', 'bg-card text-ink', 'bg-orange text-ink', 'bg-pine text-white', 'bg-sky text-ink', 'bg-card text-ink']
 
 export function Recognition() {
   return (
-    <section id="recognition" data-chapter="Recognition" data-stack className="relative overflow-hidden bg-sky py-28 lg:h-[100svh] lg:py-0" aria-labelledby="recognition-title">
+    <section id="recognition" data-chapter="Recognition" data-stack className="relative overflow-hidden bg-ink py-28 text-paper lg:h-[100svh] lg:py-0" aria-labelledby="recognition-title">
       <div className="wrap grid h-full gap-10 lg:grid-cols-[1fr_1.25fr] lg:items-center lg:gap-16">
         <div>
-          <p className="kicker text-un-deep" data-reveal>
+          <p className="kicker text-orange" data-reveal>
             Recognition
           </p>
           <h2 id="recognition-title" data-split="words" className="mt-5 text-[clamp(2.4rem,5.4vw,5.2rem)]">
             Backed by the institutions that shape public life.
           </h2>
           <p className="mt-6 hidden items-center gap-4 font-mono text-sm tracking-[0.18em] uppercase lg:flex" aria-hidden>
-            <span data-stack-count className="text-un-deep">
+            <span data-stack-count className="text-orange">
               01
             </span>
-            <span className="h-[2px] w-16 bg-ink/20">
-              <span data-stack-bar className="block h-[2px] origin-left scale-x-0 bg-un-deep" />
+            <span className="h-[2px] w-16 bg-paper/25">
+              <span data-stack-bar className="block h-[2px] origin-left scale-x-0 bg-orange" />
             </span>
             <span>0{recognitions.length}</span>
           </p>
@@ -464,7 +464,7 @@ export function Partners() {
 
 export function Join() {
   return (
-    <section id="join" data-chapter="Join" className="relative overflow-hidden bg-pine pb-20 text-white sm:pb-28" aria-labelledby="join-title">
+    <section id="join" data-chapter="Join" className="relative overflow-hidden bg-un pb-20 text-white sm:pb-28" aria-labelledby="join-title">
       <CrownStage />
       <div className="wrap relative grid gap-14 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
         <div>

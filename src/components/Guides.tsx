@@ -5,7 +5,7 @@ import { Arrow, Crown, Picture } from './ui'
 /*
  * MUN guides: every guide is a booklet. Its cover swings open on hover (or a
  * tap) to show the real first page behind it, and the booklets fan out of a
- * single stack as the section scrolls in (see guides() in cinema.ts).
+ * single stack as the section scrolls in (see guidesShelf() in cinema.ts).
  */
 export function Guides() {
   return (
@@ -88,8 +88,7 @@ function Booklet({ g, n }: { g: Guide; n: number }) {
             <span className="block font-display text-[clamp(1.9rem,3vw,2.5rem)] leading-[0.98] font-semibold tracking-[-0.02em]">{g.title}</span>
             <span className="mt-3 flex items-center gap-2 font-mono text-xs tracking-[0.16em] uppercase opacity-85">
               <span aria-hidden className="grid size-6 place-items-center rounded-full border-2 border-current text-[0.7rem] transition-transform duration-500 group-hover:rotate-180">↻</span>
-              {g.pages} pages · <span className="pointer-coarse:hidden">hover to open</span>
-              <span className="hidden pointer-coarse:inline">tap to open</span>
+              <span className="whitespace-nowrap">{g.pages} pages</span>
             </span>
           </span>
         </span>

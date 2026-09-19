@@ -43,14 +43,14 @@ function Nav() {
         <div className="wrap flex items-center justify-between py-4 sm:py-5">
           <a
             href="#top"
-            className="pointer-events-auto flex min-h-11 items-center gap-3 rounded-full bg-paper/90 py-1.5 pr-5 pl-4 shadow-[0_6px_24px_-12px_rgb(43_9_6/0.5)] backdrop-blur-md"
+            className="pointer-events-auto flex min-h-11 items-center gap-3 rounded-full bg-paper py-1.5 pr-5 pl-4 shadow-[0_6px_24px_-12px_rgb(43_9_6/0.5)] backdrop-blur-md"
             aria-label="MMUN, back to the top"
           >
             <Crown className="h-6 w-8 text-un" />
             <span className="font-display text-xl font-semibold tracking-wide text-ink">MMUN</span>
           </a>
 
-          <div className="pointer-events-none hidden items-center gap-3 rounded-full bg-paper/90 px-5 py-2.5 text-[0.78rem] font-bold tracking-[0.28em] text-ink uppercase shadow-[0_6px_24px_-12px_rgb(43_9_6/0.5)] backdrop-blur-md md:flex">
+          <div className="pointer-events-none hidden items-center gap-3 rounded-full bg-paper px-5 py-2.5 text-[0.78rem] font-bold tracking-[0.28em] text-ink uppercase shadow-[0_6px_24px_-12px_rgb(43_9_6/0.5)] backdrop-blur-md md:flex">
             <span className="overflow-hidden">
               <span data-chapter-num className="block text-orange-deep">
                 01
@@ -109,7 +109,7 @@ function MotionToggle() {
       onClick={toggle}
       aria-pressed={on}
       title={on ? 'Turn the animation off' : 'Turn the animation on'}
-      className="flex min-h-11 items-center gap-2 rounded-full bg-paper/90 px-4 text-sm font-bold text-ink shadow-[0_6px_24px_-12px_rgb(43_9_6/0.5)] backdrop-blur-md transition-colors hover:bg-orange"
+      className="flex min-h-11 items-center gap-2 rounded-full bg-paper px-4 text-sm font-bold text-ink shadow-[0_6px_24px_-12px_rgb(43_9_6/0.5)] backdrop-blur-md transition-colors hover:bg-orange"
     >
       <span aria-hidden className={`size-2.5 rounded-full ${on ? 'bg-orange-deep' : 'bg-ink-soft'}`} />
       <span className="hidden sm:inline">Motion {on ? 'on' : 'off'}</span>

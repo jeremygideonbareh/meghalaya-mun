@@ -230,7 +230,7 @@ export function Menu({ open, onClose, opener }: { open: boolean; onClose: () => 
           </div>
 
           {/* Groups */}
-          <nav className="flex-1 overflow-y-auto overscroll-contain" aria-label="Chapters">
+          <nav className="flex-1 overflow-y-auto overscroll-contain bg-card" aria-label="Chapters">
             {groups.map((g) => {
               const isOpen = expanded === g.id
               return (
@@ -266,8 +266,8 @@ export function Menu({ open, onClose, opener }: { open: boolean; onClose: () => 
                               </span>
                               <span className="relative z-10 font-bold tracking-[0.06em] uppercase transition-transform duration-300 group-hover:translate-x-1.5">{item.label}</span>
                               {current && (
-                                <span className="relative z-10 ml-auto flex items-center gap-2 font-mono text-[0.65rem] tracking-[0.16em] text-un uppercase">
-                                  <span className="size-2 animate-ping rounded-full bg-un" /> You are here
+                                <span className="relative z-10 ml-auto flex shrink-0 items-center gap-2 font-mono text-[0.65rem] tracking-[0.16em] whitespace-nowrap text-un uppercase">
+                                  <span className="size-2 animate-ping rounded-full bg-un" /> Here
                                 </span>
                               )}
                               {item.external && <Icon name="external" className="relative z-10 ml-auto size-4 opacity-60" />}
@@ -322,7 +322,7 @@ export function Menu({ open, onClose, opener }: { open: boolean; onClose: () => 
                 target="_blank"
                 rel="noopener"
                 aria-label="Join the MMUN WhatsApp community"
-                className="grid size-16 shrink-0 place-items-center rounded-full border-2 border-ink bg-whatsapp text-white shadow-[4px_4px_0_var(--color-ink)] transition-transform hover:-translate-y-1 hover:rotate-6"
+                className="grid size-16 shrink-0 place-items-center rounded-full border-2 border-ink bg-orange text-ink shadow-[4px_4px_0_var(--color-ink)] transition-transform hover:-translate-y-1 hover:rotate-6"
               >
                 <Icon name="whatsapp" className="size-8" />
               </a>

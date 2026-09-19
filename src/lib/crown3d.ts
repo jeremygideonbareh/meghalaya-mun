@@ -62,9 +62,9 @@ export function createCrown(canvas: HTMLCanvasElement, animate: boolean): CrownA
   })
   shape.closePath()
 
-  const blue = new MeshPhysicalMaterial({ color: 0x7d0000, roughness: 0.28, metalness: 0.15, clearcoat: 1, clearcoatRoughness: 0.15 })
-  const cream = new MeshPhysicalMaterial({ color: 0xf5e5cc, roughness: 0.35, metalness: 0.05, clearcoat: 0.6 })
-  const orange = new MeshPhysicalMaterial({ color: 0xff9e0f, roughness: 0.15, metalness: 0.1, clearcoat: 1, emissive: 0x7a3a00, emissiveIntensity: 0.35 })
+  const blue = new MeshPhysicalMaterial({ color: 0xf5e5cc, roughness: 0.28, metalness: 0.15, clearcoat: 1, clearcoatRoughness: 0.15 })
+  const cream = new MeshPhysicalMaterial({ color: 0xff9e0f, roughness: 0.35, metalness: 0.05, clearcoat: 0.6 })
+  const orange = new MeshPhysicalMaterial({ color: 0xcf4504, roughness: 0.15, metalness: 0.1, clearcoat: 1, emissive: 0x7a3a00, emissiveIntensity: 0.35 })
 
   const crown = new Group()
   const body = new Mesh(

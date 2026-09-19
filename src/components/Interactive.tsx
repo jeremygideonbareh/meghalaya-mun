@@ -132,7 +132,7 @@ export function Placard() {
   )}`
 
   return (
-    <section id="placard" data-chapter="Your placard" className="relative overflow-hidden bg-sky py-20 sm:py-28" aria-labelledby="placard-title">
+    <section id="placard" data-chapter="Your placard" className="relative overflow-hidden border-y-2 border-ink bg-sky py-20 sm:py-28" aria-labelledby="placard-title">
       <div className="wrap grid grid-cols-[minmax(0,1fr)] items-center gap-x-20 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:grid-rows-[auto_auto] lg:gap-y-0">
         <div className="min-w-0 lg:self-end">
           <p className="kicker text-un-deep" data-reveal>
