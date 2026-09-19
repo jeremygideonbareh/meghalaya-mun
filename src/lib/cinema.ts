@@ -396,7 +396,7 @@ function recognition() {
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: `+=${cards.length * 70}%`,
+        end: `+=${cards.length * 55}%`,
         pin: true,
         scrub: 0.7,
         onUpdate: (self) => {
@@ -408,7 +408,7 @@ function recognition() {
     cards.forEach((card, i) => {
       if (i === 0) return
       const at = i - 1
-      tl.set(card, { autoAlpha: 1 }, at).to(card, { yPercent: 0, rotate: i % 2 ? -1.5 : 1.5, duration: 1, ease: 'power2.out' }, at).to(
+      tl.set(card, { autoAlpha: 1 }, at).to(card, { yPercent: 0, rotate: 0, duration: 1, ease: 'power2.out' }, at).to(
         cards[i - 1],
         { scale: 0.9, yPercent: -6, rotate: i % 2 ? 3 : -3, filter: 'brightness(0.85)', duration: 1, ease: 'power2.out' },
         at,

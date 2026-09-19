@@ -49,8 +49,11 @@ export function Footer() {
               </a>
             </li>
           </ul>
-          <p className="mt-6 text-sm text-paper/70">
-            {edition.title} · {edition.dates} · {edition.venue}, {edition.city}
+          <p className="mt-6 grid gap-1 text-sm text-paper/70">
+            <span>{edition.title}</span>
+            <span>
+              {edition.dates} · {edition.venue}, {edition.city}
+            </span>
           </p>
         </div>
       </div>

@@ -78,10 +78,10 @@ function Nav() {
               onClick={() => setOpen(true)}
               aria-expanded={open}
               aria-controls="menu"
-              className="flex min-h-11 items-center gap-3 rounded-full bg-un px-5 text-sm font-bold tracking-[0.2em] text-white uppercase shadow-[0_6px_24px_-12px_rgb(19_34_58/0.6)] transition-colors hover:bg-ink"
+              className="flex min-h-11 min-w-11 items-center justify-center gap-3 rounded-full bg-un px-3.5 text-sm font-bold min-[400px]:px-5 tracking-[0.2em] text-white uppercase shadow-[0_6px_24px_-12px_rgb(19_34_58/0.6)] transition-colors hover:bg-ink"
               data-cursor="Open"
             >
-              Menu
+              <span className="max-[399px]:sr-only">Menu</span>
               <span aria-hidden className="grid gap-1">
                 <span className="block h-px w-5 bg-current" />
                 <span className="block h-px w-3 bg-current" />

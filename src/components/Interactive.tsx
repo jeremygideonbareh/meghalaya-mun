@@ -102,7 +102,7 @@ export function Team() {
           </div>
           <p className="max-w-lg text-lg text-ink-soft lg:justify-self-end" data-reveal>
             MMUN is a non-profit made up wholly of youth from diverse backgrounds. The secretariat plans every committee,
-            speaker and night of the conference. Tap a card to reach them.
+            speaker and night of the conference. Turn a card over to meet them.
           </p>
         </div>
 
@@ -139,7 +139,8 @@ export function Team() {
                         <span className="mt-1 block font-mono text-xs tracking-[0.18em] uppercase opacity-80">{m.role}</span>
                         <span className="mt-4 inline-flex items-center gap-2 font-mono text-xs tracking-[0.18em] uppercase opacity-80">
                           <span aria-hidden className="grid size-7 place-items-center rounded-full border-2 border-current">↻</span>
-                          Tap to turn over
+                          <span className="pointer-coarse:hidden">Click to turn over</span>
+                          <span className="hidden pointer-coarse:inline">Tap to turn over</span>
                         </span>
                       </span>
                     </span>

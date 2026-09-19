@@ -25,10 +25,10 @@ export function Manifesto() {
     <section id="manifesto" data-chapter="Who we are" className="relative bg-paper py-20 sm:py-28">
       <div className="wrap grid gap-12 lg:grid-cols-[0.8fr_2fr]">
         <div>
-          <p className="kicker text-orange-deep" data-reveal>
+          <p className="kicker relative z-10 text-orange-deep" data-reveal>
             Who we are
           </p>
-          <div className="mt-8 hidden lg:block" data-speed="0.85">
+          <div className="mt-14 hidden lg:block" data-speed="0.92">
             <div data-mask-img className="overflow-hidden rounded-[1.5rem]">
               <Picture name="delegate-bw" alt="A delegate leans in to speak during a session" sizes="22rem" className="aspect-[4/5] w-full object-cover" />
             </div>
@@ -74,7 +74,7 @@ export function Theme() {
         <h2 id="theme-title" className="kicker text-white">
           Theme of the 7th edition
         </h2>
-        <p className="hidden font-mono text-xs tracking-[0.2em] text-white/80 uppercase sm:block">Renewal · Rebirth · A whole new era</p>
+        <p className="hidden rounded-full bg-ink/55 px-4 py-2 font-mono text-xs tracking-[0.2em] text-white uppercase backdrop-blur-sm sm:block">Renewal · Rebirth · A whole new era</p>
       </div>
 
       {theme.words.map((w, i) => (
@@ -148,7 +148,7 @@ export function Committees() {
           <div>
             <p className="kicker text-white">Eight committees</p>
             <h2 id="committees-title" className="mt-4 text-[clamp(2.2rem,5.5vw,5rem)]">
-              Three days. Eight rooms. <em className="text-white underline decoration-orange decoration-4 underline-offset-8">One world.</em>
+              Three days. Eight rooms. <em className="whitespace-nowrap text-white underline decoration-orange decoration-4 underline-offset-8">One world.</em>
             </h2>
           </div>
         </div>
@@ -162,7 +162,7 @@ export function Committees() {
                 <article
                   key={c.code}
                   data-hcard
-                  className="relative h-[min(60svh,30rem)] w-[84vw] shrink-0 [transform-style:preserve-3d] sm:w-[min(82vw,24rem)]"
+                  className="relative h-[min(50svh,25rem)] w-[84vw] shrink-0 sm:h-[min(60svh,30rem)] [transform-style:preserve-3d] sm:w-[min(82vw,24rem)]"
                 >
                   <button
                     type="button"
@@ -189,7 +189,8 @@ export function Committees() {
                         <span className="mt-3 block text-lg font-bold">{c.name}</span>
                         <span className="mt-5 inline-flex items-center gap-2 font-mono text-xs tracking-[0.18em] uppercase opacity-80">
                           <span aria-hidden className="grid size-7 place-items-center rounded-full border-2 border-current">↻</span>
-                          Tap to turn over
+                          <span className="pointer-coarse:hidden">Click to turn over</span>
+                          <span className="hidden pointer-coarse:inline">Tap to turn over</span>
                         </span>
                       </span>
                     </span>
@@ -223,7 +224,7 @@ export function Committees() {
 
 export function Speaker() {
   return (
-    <section id="speaker" data-chapter="Guest speaker" data-spotlight className="relative overflow-hidden bg-paper py-20 sm:py-28">
+    <section id="speaker" data-chapter="Guest speaker" data-spotlight className="relative overflow-hidden bg-paper pt-16 pb-20 sm:pt-20 sm:pb-24">
       <div
         data-spot-light
         aria-hidden
@@ -288,9 +289,9 @@ export function Frames() {
                   setOpen(i)
                 }}
                 data-cursor="View"
-                className="reel-item absolute top-0 left-0 block w-[44vw] overflow-hidden rounded-[1.25rem] bg-ink text-left shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [backface-visibility:visible] sm:w-[19rem] lg:w-[21rem]"
+                className="reel-item absolute top-0 left-0 block w-[58vw] overflow-hidden rounded-[1.25rem] bg-ink text-left shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [backface-visibility:visible] sm:w-[19rem] lg:w-[21rem]"
               >
-                <Picture name={g.image} alt={g.caption} sizes="(min-width: 1024px) 21rem, 44vw" className="aspect-[3/4] w-full object-cover" />
+                <Picture name={g.image} alt={g.caption} sizes="(min-width: 1024px) 21rem, 58vw" className="aspect-[3/4] w-full object-cover" />
               </button>
             ))}
           </div>
@@ -300,7 +301,7 @@ export function Frames() {
             {gallery[0].caption}
           </span>
         </p>
-        <p className="pointer-events-none absolute top-4 right-5 font-mono text-xs tracking-[0.18em] text-ink uppercase sm:right-8">
+        <p className="wrap pointer-events-none absolute inset-x-0 top-2 text-right font-mono text-xs tracking-[0.18em] text-ink uppercase">
           Scroll or drag to turn
         </p>
       </div>

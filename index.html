@@ -10,6 +10,7 @@
     />
     <meta name="theme-color" content="#2e77d0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preload" href="/fonts/ranade-variable.woff2" as="font" type="font/woff2" crossorigin />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Meghalaya Model United Nations" />
     <meta property="og:description" content="Renovar · Renasci · Renascentia. The 7th International Shillong Edition." />
@@ -84,6 +85,15 @@
         fill: #f26b1d;
         opacity: 0;
         animation: intro-gem 0.4s ease 1.3s forwards;
+      }
+      #intro .count,
+      #intro .words {
+        opacity: 0;
+        transition: opacity 0.35s ease;
+      }
+      html.intro-type #intro .count,
+      html.intro-type #intro .words {
+        opacity: 1;
       }
       #intro .count {
         font:
@@ -188,10 +198,11 @@
         var html = document.documentElement
         if (html.dataset.motion === 'off') return
         var el = document.getElementById('intro-count')
-        var start = performance.now()
-        var dur = 1800
+        var start = 0
+        var dur = 1600
         var counted = false
         function tick(now) {
+          if (!start) start = now
           var t = Math.min(1, (now - start) / dur)
           var eased = 1 - Math.pow(1 - t, 3)
           el.textContent = String(Math.round(eased * 100)).padStart(2, '0')
@@ -201,7 +212,17 @@
             maybeOpen()
           }
         }
-        requestAnimationFrame(tick)
+        // start counting once the display face is in, so the digits never swap fonts
+        var begun = false
+        function begin() {
+          if (begun) return
+          begun = true
+          html.classList.add('intro-type')
+          requestAnimationFrame(tick)
+        }
+        if (document.fonts && document.fonts.load) document.fonts.load('500 64px Ranade').then(begin, begin)
+        else begin()
+        setTimeout(begin, 900)
         var opened = false
         function open() {
           if (opened) return
