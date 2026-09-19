@@ -38,14 +38,14 @@ export function Guides() {
           target="_blank"
           rel="noopener"
           data-reveal
-          className="group mt-16 flex flex-col gap-6 overflow-hidden rounded-[1.75rem] border-2 border-ink bg-un p-7 text-paper shadow-[6px_6px_0_var(--color-ink)] transition-transform duration-500 hover:-translate-y-1 sm:flex-row sm:items-center sm:justify-between sm:p-10"
+          className="group mt-16 flex flex-col gap-6 overflow-hidden rounded-[1.75rem] border-2 border-ink bg-pine p-7 text-white shadow-[6px_6px_0_var(--color-ink)] transition-transform duration-500 hover:-translate-y-1 sm:flex-row sm:items-center sm:justify-between sm:p-10"
         >
           <span className="flex items-center gap-6">
             <span className="grid size-16 shrink-0 place-items-center rounded-2xl bg-orange text-ink transition-transform duration-700 group-hover:rotate-[-8deg]">
               <Crown className="h-8 w-10" />
             </span>
             <span>
-              <span className="block font-mono text-xs tracking-[0.2em] text-orange uppercase">Read the newsletter</span>
+              <span className="block font-mono text-xs tracking-[0.2em] text-paper uppercase">Read the newsletter</span>
               <span className="mt-1 block font-display text-[clamp(1.8rem,4vw,3rem)] leading-none">The MMUN Newsletter</span>
             </span>
           </span>

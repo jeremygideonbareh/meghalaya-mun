@@ -260,8 +260,10 @@ export type Member = {
   also?: string
   /** image name in images.json */
   photo?: string
-  /** listed first and shown larger */
+  /** listed first; leads get a contact button */
   lead?: boolean
+  /** the name to address them by, where it is not the first word */
+  callName?: string
 }
 
 export const councils: { id: Council; label: string; blurb: string }[] = [
@@ -273,8 +275,8 @@ export const councils: { id: Council; label: string; blurb: string }[] = [
 export const team: Member[] = [
   { name: 'Palki Kashyap', role: 'Secretary General', council: 'executive', photo: 'team-palki-kashyap', lead: true },
   { name: 'Md. Rezaul Islam', role: 'Chef de Cabinet', council: 'executive', photo: 'team-rezaul-islam', lead: true },
-  { name: 'Vakkalagadda Drishti Rao', role: 'Director General', council: 'executive', photo: 'team-drishti-rao', lead: true },
-  { name: 'Lakshya Saraf', role: 'Additional Director General', council: 'executive', photo: 'team-lakshya-saraf', lead: true },
+  { name: 'Vakkalagadda Drishti Rao', callName: 'Drishti', role: 'Director General', council: 'executive', photo: 'team-drishti-rao', lead: true },
+  { name: 'Lakshya Saraf', role: 'Additional Director General', council: 'executive', photo: 'team-lakshya-saraf' },
   { name: 'Eddy Ripnar', role: 'Director of Finance', also: 'Project Manager, MeghMUN Association', council: 'executive' },
   { name: 'Senrita Raksam Marak', role: 'Regional Director, Garo Hills', council: 'executive', photo: 'team-senrita-marak' },
   { name: 'Ibalarishisha Syiem', role: 'Joint Regional Director, Jaintia Hills & Ri-Bhoi', also: 'Project Manager, MeghMUN Association', council: 'executive' },

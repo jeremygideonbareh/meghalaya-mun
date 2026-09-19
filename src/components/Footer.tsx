@@ -52,7 +52,7 @@ export function Footer() {
           <p className="mt-6 grid gap-1 text-sm text-paper/70">
             <span>{edition.title}</span>
             <span>
-              {edition.dates} <span className="whitespace-nowrap">· {edition.venue}, {edition.city}</span>
+              <span className="whitespace-nowrap">{edition.dates}</span> <span className="whitespace-nowrap">· {edition.venue}, {edition.city}</span>
             </span>
           </p>
         </div>

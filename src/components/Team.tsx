@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { contacts, councils, team, type Council, type Member } from '../data/content'
+import { contacts, councils, org, team, type Council, type Member } from '../data/content'
 import { Arrow, Crown, Picture } from './ui'
 
 /*
@@ -194,7 +194,7 @@ export function Team() {
 
         {/* Controls: council tabs with a sliding highlight, and a search */}
         <div className="mt-12 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between" data-reveal>
-          <div className="-mx-5 overflow-x-auto px-5 pb-1 sm:mx-0 sm:px-0">
+          <div className="-mx-5 overflow-x-auto px-5 pb-1 [mask-image:linear-gradient(90deg,#000_85%,transparent)] sm:mx-0 sm:px-0 sm:[mask-image:none]">
             <div ref={tabs} role="group" aria-label="Filter by council" className="relative flex w-max gap-1 rounded-full border-2 border-ink bg-card p-1 shadow-[4px_4px_0_var(--color-ink)]">
               <span ref={pill} aria-hidden className="absolute top-1 bottom-1 left-0 rounded-full bg-ink transition-[transform,width] duration-500 ease-[cubic-bezier(0.34,1.4,0.64,1)]" />
               {(['all', 'executive', 'secretariat', 'advisory'] as Filter[]).map((f) => {
@@ -262,6 +262,7 @@ function MemberCard({ m, hidden }: { m: Member; hidden: boolean }) {
   const t = tone[m.council]
   const contact = contacts.find((c) => c.name === m.name)
   const wide = !!contact
+  const longWord = Math.max(...m.name.split(' ').map((w) => w.length)) > 10
   const card = useRef<HTMLDivElement>(null)
 
   // A gentle 3D lean towards the pointer
@@ -277,7 +278,7 @@ function MemberCard({ m, hidden }: { m: Member; hidden: boolean }) {
   }
 
   return (
-    <li data-member hidden={hidden} className={`member ${wide ? 'col-span-2' : ''}`} data-cursor={`Hi, ${firstName(m.name)}`}>
+    <li data-member hidden={hidden} className={`member ${wide ? 'col-span-2' : ''}`} data-cursor={`Hi, ${m.callName ?? firstName(m.name)}`}>
       <div>
         <div ref={card} onPointerMove={onMove} onPointerLeave={onLeave} className="member-card group relative">
           <div className={`member-frame relative overflow-hidden rounded-[1.4rem] border-2 border-ink ${wide ? 'aspect-[8/5]' : 'aspect-[4/5]'} ${m.photo ? 'bg-ink' : 'member-tile'}`} style={{ '--tone': t.color, '--on': t.on } as React.CSSProperties}>
@@ -308,7 +309,7 @@ function MemberCard({ m, hidden }: { m: Member; hidden: boolean }) {
           <div className="member-plate relative mx-2 -mt-7 rounded-xl border-2 border-ink bg-card shadow-[0_4px_0_var(--color-ink)]">
             <span aria-hidden className={`block h-1.5 rounded-t-[0.6rem] ${t.band}`} />
             <div className="px-3 pt-2 pb-3 sm:px-4">
-              <p className="font-display text-[clamp(0.95rem,1.3vw,1.1rem)] leading-[1.1] font-semibold tracking-[-0.01em] [overflow-wrap:anywhere] uppercase">{m.name}</p>
+              <p className={`font-display leading-[1.1] font-semibold tracking-[-0.01em] uppercase ${longWord ? 'text-[clamp(0.8rem,1.1vw,0.95rem)]' : 'text-[clamp(0.95rem,1.3vw,1.1rem)]'}`}>{m.name}</p>
               <p className="mt-1 line-clamp-2 min-h-[2.5em] font-mono text-[0.72rem] leading-[1.25] tracking-[0.04em] text-ink-soft uppercase" title={m.also ? `${m.role} · ${m.also}` : m.role}>
                 {m.role}
                 {m.also && <span className="sr-only"> · {m.also}</span>}
@@ -316,10 +317,16 @@ function MemberCard({ m, hidden }: { m: Member; hidden: boolean }) {
             </div>
           </div>
         </div>
-        {contact && (
+        {contact ? (
           <a href={`tel:${contact.tel}`} className="member-cta btn btn-line mt-4 w-full" data-magnet>
             Call {firstName(m.name)} · {contact.phone} <Arrow className="size-4" />
           </a>
+        ) : (
+          m.lead && (
+            <a href={`mailto:${org.email}?subject=${encodeURIComponent(`For ${m.name}, ${m.role}`)}`} className="member-cta btn btn-line mt-4 w-full" data-magnet>
+              Write to {m.callName ?? firstName(m.name)} <Arrow className="size-4" />
+            </a>
+          )
         )}
       </div>
     </li>
