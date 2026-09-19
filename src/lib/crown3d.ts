@@ -45,10 +45,10 @@ export function createCrown(canvas: HTMLCanvasElement, animate: boolean): CrownA
   const key = new DirectionalLight(0xffffff, 2.2)
   key.position.set(-4, 6, 6)
   scene.add(key)
-  const rim = new PointLight(0xf26b1d, 40, 20)
+  const rim = new PointLight(0xff9e0f, 40, 20)
   rim.position.set(4, -1, -3)
   scene.add(rim)
-  const fill = new PointLight(0xcfe2f5, 25, 20)
+  const fill = new PointLight(0xffcc99, 25, 20)
   fill.position.set(3, 3, 5)
   scene.add(fill)
 
@@ -62,9 +62,9 @@ export function createCrown(canvas: HTMLCanvasElement, animate: boolean): CrownA
   })
   shape.closePath()
 
-  const blue = new MeshPhysicalMaterial({ color: 0x2e77d0, roughness: 0.28, metalness: 0.15, clearcoat: 1, clearcoatRoughness: 0.15 })
-  const cream = new MeshPhysicalMaterial({ color: 0xfffcf5, roughness: 0.35, metalness: 0.05, clearcoat: 0.6 })
-  const orange = new MeshPhysicalMaterial({ color: 0xf26b1d, roughness: 0.15, metalness: 0.1, clearcoat: 1, emissive: 0x6b2206, emissiveIntensity: 0.35 })
+  const blue = new MeshPhysicalMaterial({ color: 0x7d0000, roughness: 0.28, metalness: 0.15, clearcoat: 1, clearcoatRoughness: 0.15 })
+  const cream = new MeshPhysicalMaterial({ color: 0xf5e5cc, roughness: 0.35, metalness: 0.05, clearcoat: 0.6 })
+  const orange = new MeshPhysicalMaterial({ color: 0xff9e0f, roughness: 0.15, metalness: 0.1, clearcoat: 1, emissive: 0x7a3a00, emissiveIntensity: 0.35 })
 
   const crown = new Group()
   const body = new Mesh(

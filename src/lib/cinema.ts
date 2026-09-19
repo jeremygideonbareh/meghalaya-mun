@@ -32,7 +32,12 @@ export function startCinema() {
         effects: true,
         normalizeScroll: false,
       })
-      return () => smoother.kill()
+      // the menu steers the page through this
+      ;(window as Window & { __mmunSmoother?: ScrollSmoother }).__mmunSmoother = smoother
+      return () => {
+        delete (window as Window & { __mmunSmoother?: ScrollSmoother }).__mmunSmoother
+        smoother.kill()
+      }
     })
 
     heroIntro()
@@ -62,6 +67,7 @@ export function startCinema() {
       recognition()
       marquees()
       wordmark()
+      guidesShelf()
       reveals()
       maskedImages()
       chapters()
@@ -812,5 +818,45 @@ function reel() {
       dragAngle -= 0.05
       apply()
     }
+  })
+}
+
+// ---------------------------------------------------------------- guides
+
+/** The guide booklets start as one stack and fan out onto the shelf. */
+function guidesShelf() {
+  const section = document.querySelector<HTMLElement>('[data-guides]')
+  if (!section) return
+  const items = q('[data-guide]', section)
+  const mm = gsap.matchMedia()
+  mm.add(DESKTOP, () => {
+    const mid = items.length / 2 - 0.5
+    const first = items[0].getBoundingClientRect()
+    items.forEach((el, i) => {
+      const r = el.getBoundingClientRect()
+      gsap.fromTo(
+        el,
+        { x: first.left + (r.width + 24) * mid - r.left, y: 120, rotate: (i - mid) * 7, zIndex: items.length - i },
+        {
+          x: 0,
+          y: 0,
+          rotate: 0,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 85%', end: 'top 15%', scrub: 0.8 },
+        },
+      )
+    })
+  })
+  mm.add('(max-width: 1023px)', () => {
+    items.forEach((el, i) => {
+      gsap.from(el, {
+        autoAlpha: 0,
+        x: i % 2 ? 60 : -60,
+        rotate: i % 2 ? 5 : -5,
+        duration: 1,
+        ease: 'expo.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+      })
+    })
   })
 }

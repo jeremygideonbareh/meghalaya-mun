@@ -18,23 +18,25 @@
 }
 
 /*
- * A bright, printed-programme palette taken from what MMUN actually is:
- * UN blue, programme paper, navy ink, Meghalaya's pine, and the orange of
- * the Khasi mandarins the state is famous for. Solid colour only.
+ * The citrus palette: Berry Pop, Orange Zest, Neon Citrus, Citrus Fizz and
+ * Champagne Glow, with a berry-black ink for text. Token names are kept from
+ * the first palette so components read the same: `un` is now the berry brand
+ * colour, `sky` the fizz, `orange` the neon citrus, `pine` the zest.
  */
 @theme {
-  --color-paper: #f4efe4;
-  --color-card: #fffcf5;
-  --color-ink: #13223a;
-  --color-ink-soft: #4b5566;
-  --color-un: #2e77d0;
-  --color-un-deep: #1f5aa6;
-  --color-sky: #cfe2f5;
-  --color-orange: #f26b1d;
-  --color-orange-deep: #b8430f;
-  --color-pine: #1d5c47;
-  --color-peach: #ffd2b3;
-  --color-mint: #bfe3cf;
+  --color-paper: #f5e5cc; /* Champagne Glow */
+  --color-card: #fff4e3;
+  --color-ink: #2b0906;
+  --color-ink-soft: #6a3b2c;
+  --color-un: #7d0000; /* Berry Pop */
+  --color-un-deep: #5c0000;
+  --color-sky: #ffcc99; /* Citrus Fizz */
+  --color-orange: #ff9e0f; /* Neon Citrus */
+  --color-orange-deep: #b23a03; /* Orange Zest, darkened for small text */
+  --color-pine: #cf4504; /* Orange Zest */
+  --color-peach: #ffe2c2;
+  --color-mint: #ffbd5c;
+  --color-whatsapp: #25d366;
 
   --font-display: 'Ranade', 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Geist Variable', ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
@@ -121,7 +123,7 @@
   position: absolute;
   inset: 20% 25% 10%;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgb(242 107 29 / 0.35), transparent);
+  background: radial-gradient(closest-side, rgb(255 158 15 / 0.35), transparent);
   filter: blur(30px);
 }
 
@@ -293,4 +295,237 @@ html[data-motion='off'] [data-hscroll] {
 html[data-motion='off'] [data-htrack] {
   width: auto;
   flex-wrap: wrap;
+}
+
+/* ---- Meet the team: nameplate cards ----
+   Arrival: the frame wipes open from the top in the council's colour, that
+   colour shutters away to the right to show the photo settling from a zoom,
+   and the nameplate drops onto the desk. */
+html[data-motion='on'] .member-frame {
+  clip-path: inset(0 0 100% 0 round 1.4rem);
+  transition: clip-path 0.7s cubic-bezier(0.77, 0, 0.18, 1) var(--delay, 0ms);
+}
+html[data-motion='on'] .member.is-in .member-frame {
+  clip-path: inset(0 0 0 0 round 1.4rem);
+}
+.member-shutter {
+  transform: scaleX(0);
+  transform-origin: right;
+}
+html[data-motion='on'] .member:not(.is-in) .member-shutter {
+  transform: scaleX(1);
+}
+html[data-motion='on'] .member.is-in .member-shutter {
+  transition: transform 0.85s cubic-bezier(0.77, 0, 0.18, 1) calc(var(--delay, 0ms) + 0.55s);
+}
+html[data-motion='on'] .member:not(.is-in) .member-photo,
+html[data-motion='on'] .member:not(.is-in) .member-mono > span {
+  transform: scale(1.35);
+}
+html[data-motion='on'] .member.is-in .member-photo,
+html[data-motion='on'] .member.is-in .member-mono > span {
+  transition:
+    filter 0.9s ease,
+    transform 1.6s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--delay, 0ms) + 0.55s);
+}
+html[data-motion='on'] .member:not(.is-in) .member-plate {
+  opacity: 0;
+  transform: translateZ(28px) translateY(-34px) rotateX(-8deg);
+}
+html[data-motion='on'] .member.is-in .member-plate {
+  transition:
+    opacity 0.3s ease calc(var(--delay, 0ms) + 1s),
+    transform 0.8s cubic-bezier(0.34, 1.7, 0.64, 1) calc(var(--delay, 0ms) + 1s);
+}
+html[data-motion='on'] .member:not(.is-in) .member-cta {
+  opacity: 0;
+}
+.member-cta {
+  transition: opacity 0.6s ease calc(var(--delay, 0ms) + 1.3s);
+}
+.member-card {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.member-photo {
+  filter: grayscale(1) contrast(1.12);
+  transform: scale(1.02);
+  transition:
+    filter 0.9s ease,
+    transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.member-duo {
+  opacity: 0.72;
+  transition: opacity 0.9s ease;
+}
+.member-glow {
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+.member.is-lit .member-photo,
+.member-card:hover .member-photo {
+  filter: none;
+  transform: scale(1.07);
+}
+.member.is-lit .member-duo,
+.member-card:hover .member-duo {
+  opacity: 0;
+}
+.member-card:hover .member-glow {
+  opacity: 0.1;
+}
+.member-plate {
+  transform: translateZ(28px) rotateX(-8deg);
+  transform-origin: 50% 0;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.member-card:hover .member-plate,
+.member.is-lit .member-plate {
+  transform: translateZ(40px) translateY(-6px) rotateX(0deg);
+}
+.member-mono > span {
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.member-card:hover .member-mono > span {
+  transform: scale(1.1) rotate(-5deg);
+}
+html[data-motion='off'] .member-photo {
+  filter: none;
+}
+html[data-motion='off'] .member-duo {
+  opacity: 0;
+}
+
+/* ---- Navigation drawer ---- */
+html[data-motion='on'] #menu:not([data-live]) {
+  visibility: hidden;
+}
+html.menu-open {
+  overflow: hidden;
+}
+.m-fold {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+    visibility 0.55s;
+}
+.m-fold[data-m-open] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+[data-m-item] {
+  opacity: 0;
+  transform: translateX(34px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+#menu[data-live] [data-m-open] [data-m-item] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.5s ease calc(var(--base, 80ms) + var(--i, 0) * 45ms),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--base, 80ms) + var(--i, 0) * 45ms);
+}
+[data-m-icon] {
+  transform: scale(0) rotate(-40deg);
+  transition: transform 0.3s ease;
+}
+#menu[data-live] [data-m-open] [data-m-icon] {
+  transform: none;
+  transition: transform 0.6s cubic-bezier(0.34, 1.8, 0.64, 1) calc(var(--base, 80ms) + 60ms + var(--i, 0) * 45ms);
+}
+/* a citrus wipe behind each row on hover */
+.m-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-orange);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.m-link:hover::before,
+.m-link:focus-visible::before {
+  transform: scaleX(1);
+}
+.m-link:hover [data-m-icon] {
+  animation: m-wiggle 0.5s ease;
+}
+@keyframes m-wiggle {
+  30% { rotate: -12deg; }
+  60% { rotate: 8deg; }
+}
+.m-link[aria-current] {
+  background: var(--color-sky);
+}
+html[data-motion='off'] [data-m-item],
+html[data-motion='off'] [data-m-icon] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+html[data-motion='off'] .m-fold {
+  transition: none;
+}
+
+/* members without a portrait yet: a cream tile, hatched, with the monogram
+   in the council colour; it floods with that colour on hover or mid-screen */
+.member-tile {
+  background:
+    repeating-linear-gradient(135deg, transparent 0 14px, color-mix(in srgb, var(--tone) 9%, transparent) 14px 15px),
+    var(--color-card);
+  color: var(--tone);
+  transition:
+    background-color 0.6s ease,
+    color 0.6s ease;
+}
+.member-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--tone);
+  clip-path: circle(0% at 50% 45%);
+  transition: clip-path 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.member-card:hover .member-tile::before,
+.member.is-lit .member-tile::before {
+  clip-path: circle(80% at 50% 45%);
+}
+.member-card:hover .member-tile,
+.member.is-lit .member-tile {
+  color: var(--on);
+}
+
+/* ---- MUN guides: booklets whose covers swing open ---- */
+.booklet {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.booklet-cover {
+  transform-origin: left center;
+  transform: perspective(1400px) rotateY(0deg);
+  transition:
+    transform 0.9s cubic-bezier(0.65, 0, 0.35, 1),
+    box-shadow 0.9s ease;
+  box-shadow: 6px 6px 0 var(--color-ink);
+  backface-visibility: hidden;
+}
+@media (hover: hover) {
+  .booklet:hover .booklet-cover {
+    transform: perspective(1400px) rotateY(-62deg);
+    box-shadow: 30px 10px 40px -10px rgb(43 9 6 / 0.45);
+  }
+  .booklet:hover {
+    transform: translateY(-6px) rotate(-1deg);
+  }
+}
+.booklet.is-open .booklet-cover {
+  transform: perspective(1400px) rotateY(-62deg);
+  box-shadow: 30px 10px 40px -10px rgb(43 9 6 / 0.45);
+}
+html[data-motion='off'] .booklet-cover {
+  transition: none;
 }

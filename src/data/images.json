@@ -194,5 +194,147 @@
    150
   ],
   "ratio": 1
+ },
+ "team-anish-singh": {
+  "widths": [
+   353
+  ],
+  "ratio": 0.8
+ },
+ "team-anuchaya-goswami": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.8
+ },
+ "team-arrick-dkhar": {
+  "widths": [
+   268
+  ],
+  "ratio": 0.8
+ },
+ "team-be-angus-langstieh": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.8
+ },
+ "team-bibek-singh": {
+  "widths": [
+   480,
+   800
+  ],
+  "ratio": 0.8
+ },
+ "team-bornstar-sangma": {
+  "widths": [
+   362
+  ],
+  "ratio": 0.8
+ },
+ "team-drishti-rao": {
+  "widths": [
+   480,
+   800
+  ],
+  "ratio": 0.8
+ },
+ "team-jonathan-bajoria": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.8
+ },
+ "team-lakshya-saraf": {
+  "widths": [
+   480,
+   800
+  ],
+  "ratio": 0.8
+ },
+ "team-lavanya-singhal": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.8
+ },
+ "team-palki-kashyap": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.8
+ },
+ "team-pragya-shandilya": {
+  "widths": [
+   258
+  ],
+  "ratio": 0.8
+ },
+ "team-rezaul-islam": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.8
+ },
+ "team-senrita-marak": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.8
+ },
+ "team-syed-sahil-ali": {
+  "widths": [
+   480,
+   800
+  ],
+  "ratio": 0.8
+ },
+ "team-taiwan-sangma": {
+  "widths": [
+   311
+  ],
+  "ratio": 0.8
+ },
+ "team-tarangita-kalita": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.8
+ },
+ "team-vayam-sangma": {
+  "widths": [
+   302
+  ],
+  "ratio": 0.8
+ },
+ "team-wanshanbok-marak": {
+  "widths": [
+   218
+  ],
+  "ratio": 0.8
+ },
+ "guide-first-mun-guide": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.7069
+ },
+ "guide-una-usa-rules-of-procedure": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.7729
+ },
+ "guide-aippm-rules-of-procedure": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.7069
+ },
+ "guide-international-press-guide": {
+  "widths": [
+   480
+  ],
+  "ratio": 0.7069
  }
 }

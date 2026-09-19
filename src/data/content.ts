@@ -247,40 +247,137 @@ export const awards = [
   { group: 'Ambassadors', names: ['Best Campus Ambassador', 'Most Promising Ambassador'] },
 ]
 
-// Meet the team. Names and roles come from the brochure's contact page; the
-// Campus Ambassador programme and its perks from the "CA PERKS" highlight.
-// Add more members (and photos) here as the secretariat shares them.
-export const team = [
-  {
-    name: 'Palki Kashyap',
-    role: 'Secretary General',
-    group: 'Secretariat',
-    initials: 'PK',
-    tint: 'bg-un text-white',
-    about: 'The Secretary General heads the secretariat and speaks for the conference, from committees and partners to every delegate’s experience.',
-  },
-  {
-    name: 'Md. Rezaul Islam',
-    role: 'Chef de Cabinet',
-    group: 'Secretariat',
-    initials: 'RI',
-    tint: 'bg-orange text-ink',
-    about: 'The Chef de Cabinet runs the secretariat day to day, coordinating the committees, the logistics and the team behind them.',
-  },
-  {
-    name: 'Campus Ambassadors',
-    role: 'Across Meghalaya and beyond',
-    group: 'Programme',
-    initials: 'CA',
-    tint: 'bg-pine text-white',
-    about: 'Ambassadors bring MMUN to their schools and colleges, with weekly incentives, monthly awards, custom certificates and reduced delegate fees.',
-  },
+// The team, from the secretariat's MeghMUN Association Member List 2026
+// (Ref. MMUN/Conf.26/ExecutiveCouncil/List01, 23 June 2026). Portraits are
+// the ones members shared in the "MMUN 2026 OC PICTURES" folder.
+export type Council = 'executive' | 'secretariat' | 'advisory'
+
+export type Member = {
+  name: string
+  role: string
+  council: Council
+  /** a second office, where the list gives one */
+  also?: string
+  /** image name in images.json */
+  photo?: string
+  /** listed first and shown larger */
+  lead?: boolean
+}
+
+export const councils: { id: Council; label: string; blurb: string }[] = [
+  { id: 'executive', label: 'Executive Council', blurb: 'Runs the conference and its regions' },
+  { id: 'secretariat', label: 'Secretariat', blurb: 'Delegates, outreach, design and logistics' },
+  { id: 'advisory', label: 'Advisory Council', blurb: 'Founders and emeritus board' },
+]
+
+export const team: Member[] = [
+  { name: 'Palki Kashyap', role: 'Secretary General', council: 'executive', photo: 'team-palki-kashyap', lead: true },
+  { name: 'Md. Rezaul Islam', role: 'Chef de Cabinet', council: 'executive', photo: 'team-rezaul-islam', lead: true },
+  { name: 'Vakkalagadda Drishti Rao', role: 'Director General', council: 'executive', photo: 'team-drishti-rao', lead: true },
+  { name: 'Lakshya Saraf', role: 'Additional Director General', council: 'executive', photo: 'team-lakshya-saraf', lead: true },
+  { name: 'Eddy Ripnar', role: 'Director of Finance', also: 'Project Manager, MeghMUN Association', council: 'executive' },
+  { name: 'Senrita Raksam Marak', role: 'Regional Director, Garo Hills', council: 'executive', photo: 'team-senrita-marak' },
+  { name: 'Ibalarishisha Syiem', role: 'Joint Regional Director, Jaintia Hills & Ri-Bhoi', also: 'Project Manager, MeghMUN Association', council: 'executive' },
+  { name: 'Taiwan Ch. Changma', role: 'Deputy Regional Director, Garo Hills', council: 'executive', photo: 'team-taiwan-sangma' },
+  { name: 'Arrick Uzail Dkhar', role: 'Senior USG, Conference Outreach', council: 'executive', photo: 'team-arrick-dkhar' },
+  { name: 'Wanshanbok K. Marak', role: 'Senior USG, Conference Operations', council: 'executive', photo: 'team-wanshanbok-marak' },
+
+  { name: 'Salzya M. Sangma', role: 'Director General, GHMUN', also: 'USG Hospitality', council: 'secretariat' },
+  { name: 'Pragya Shandilya', role: 'Joint USG, Delegate Affairs', council: 'secretariat', photo: 'team-pragya-shandilya' },
+  { name: 'Anuchaya Goswami', role: 'Joint USG, Delegate Affairs', council: 'secretariat', photo: 'team-anuchaya-goswami' },
+  { name: 'Nazia Pearl Sooting', role: 'USG, Public Relations', council: 'secretariat' },
+  { name: 'Hemraj Dass', role: 'USG, IT and Design', council: 'secretariat' },
+  { name: 'Rishat Kashyap', role: 'USG, Operations and Logistics', council: 'secretariat' },
+  { name: 'Bibek Kumar Singh', role: 'USG, Marketing', council: 'secretariat', photo: 'team-bibek-singh' },
+  { name: 'Anish Kumar Singh', role: 'OSD to the Chancellor of the Advisory Council', council: 'secretariat', photo: 'team-anish-singh' },
+  { name: 'Be Angus Langstieh', role: 'Deputy USG, Marketing (Meghalaya)', council: 'secretariat', photo: 'team-be-angus-langstieh' },
+  { name: 'Jonathan Bajoria', role: 'Deputy USG, Marketing (Assam)', council: 'secretariat', photo: 'team-jonathan-bajoria' },
+  { name: 'Rishita Yadav', role: 'Deputy USG, IT and Design', council: 'secretariat' },
+  { name: 'Sanchita Chakraborty', role: 'Deputy USG, Delegate Affairs', council: 'secretariat' },
+  { name: 'Lavanya Singhal', role: 'Deputy USG, Delegate Affairs', council: 'secretariat', photo: 'team-lavanya-singhal' },
+  { name: 'Syed Sahil Ali', role: 'Member, IT and Design', council: 'secretariat', photo: 'team-syed-sahil-ali' },
+  { name: 'Tarangita Kalita', role: 'Member, IT and Design (Videography)', council: 'secretariat', photo: 'team-tarangita-kalita' },
+  { name: 'Bornstar Ch. Sangma', role: 'Member, Hospitality', also: 'OSD to the Secretary General, GHMUN', council: 'secretariat', photo: 'team-bornstar-sangma' },
+  { name: 'Vayam G. Sangma', role: 'Member, Operations', council: 'secretariat', photo: 'team-vayam-sangma' },
+  { name: 'Zahirul Sheikh', role: 'Member, Operations', council: 'secretariat' },
+  { name: 'Jeko Changning Sangma', role: 'Member, Logistics', council: 'secretariat' },
+  { name: 'Palak Das', role: 'Member, Public Relations', council: 'secretariat' },
+  { name: 'Vivek Zimba', role: 'Member, Public Relations', council: 'secretariat' },
+  { name: 'Kiah Sarmah Kalita', role: 'Member, Public Relations (Outreach)', council: 'secretariat' },
+  { name: 'Anuva Saikia', role: 'Member, Public Relations (Outreach)', council: 'secretariat' },
+  { name: 'Chetansi Verma', role: 'Member, Public Relations (Outreach)', council: 'secretariat' },
+
+  { name: 'Meshuwa Kupar Mawthoh', role: 'Founder Emeritus & Emeritus Chair', also: 'MeghMUN Association', council: 'advisory' },
+  { name: 'Ritwick Bhuyan', role: 'Chancellor of the Advisory Council', council: 'advisory' },
+  { name: 'Shimon Shullai', role: 'Emeritus Board Member', council: 'advisory' },
+  { name: 'Dorang Dekamra Sangma', role: 'Emeritus Board Member', council: 'advisory' },
 ]
 
 export const contacts = [
   { name: 'Palki Kashyap', role: 'Secretary General', phone: '+91 93659 22781', tel: '+919365922781' },
   { name: 'Md. Rezaul Islam', role: 'Chef de Cabinet', phone: '+91 75780 95386', tel: '+917578095386' },
 ]
+
+// Delegate resources: the secretariat's guides, cleaned into standalone
+// documents (no Executive Board letters, no references to any one edition).
+export type Guide = {
+  slug: string
+  title: string
+  short: string
+  audience: string
+  pages: number
+  about: string
+  tone: string
+  href: string
+  external?: boolean
+}
+
+const guideFile = (slug: string) => `${import.meta.env.BASE_URL}guides/mmun-${slug}.pdf`
+
+export const guides: Guide[] = [
+  {
+    slug: 'first-mun-guide',
+    title: 'Your first MUN',
+    short: 'First MUN guide',
+    audience: 'Beginners',
+    pages: 7,
+    about: 'Country profiles, research, speeches, motions, and how the Lok Sabha committee runs.',
+    tone: 'bg-orange text-ink',
+    href: guideFile('first-mun-guide'),
+  },
+  {
+    slug: 'una-usa-rules-of-procedure',
+    title: 'UNA-USA rules of procedure',
+    short: 'UNA-USA ROP',
+    audience: 'UN committees',
+    pages: 5,
+    about: 'The long-form rules for UN committees: points, motions, caucuses, resolutions and voting.',
+    tone: 'bg-un text-paper',
+    href: guideFile('una-usa-rules-of-procedure'),
+  },
+  {
+    slug: 'aippm-rules-of-procedure',
+    title: 'AIPPM rules of procedure',
+    short: 'AIPPM ROP',
+    audience: 'Indian committees',
+    pages: 5,
+    about: 'Question Hour, Zero Hour, calling attention, no-confidence, anti-defection and bills.',
+    tone: 'bg-pine text-white',
+    href: guideFile('aippm-rules-of-procedure'),
+  },
+  {
+    slug: 'international-press-guide',
+    title: 'International Press Corps',
+    short: 'International press guide',
+    audience: 'Journalists',
+    pages: 26,
+    about: 'Beats, op-eds, features and press conferences, with award-winning sample articles.',
+    tone: 'bg-ink text-paper',
+    href: guideFile('international-press-guide'),
+  },
+]
+
+export const newsletter = 'https://drive.google.com/file/d/1ICTC33sKciA9muaGAomIeMrPvjRQel51/view'
 
 export const chapters = [
   { id: 'top', label: 'Prologue' },
@@ -295,5 +392,6 @@ export const chapters = [
   { id: 'recognition', label: 'Recognition' },
   { id: 'partners', label: 'Partners' },
   { id: 'placard', label: 'Your placard' },
+  { id: 'guides', label: 'MUN guides' },
   { id: 'join', label: 'Join' },
 ]

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { committees, contacts, org, team } from '../data/content'
+import { committees, org } from '../data/content'
 import type { GlobeApi } from '../lib/globe'
 import { Arrow, Crown, Laurel } from './ui'
 
@@ -79,92 +79,6 @@ export function World() {
             role="img"
           />
         </div>
-      </div>
-    </section>
-  )
-}
-
-/* ------------------------------------------------------------ Team */
-
-export function Team() {
-  const [flipped, setFlipped] = useState<string | null>(null)
-  return (
-    <section id="team" data-chapter="The team" className="relative overflow-hidden bg-paper pt-6 pb-20 sm:pt-10 sm:pb-28" aria-labelledby="team-title">
-      <div className="wrap">
-        <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-end">
-          <div>
-            <p className="kicker text-orange-deep" data-reveal>
-              Meet the team
-            </p>
-            <h2 id="team-title" data-split="words" className="mt-5 text-[clamp(2.4rem,6vw,5.6rem)]">
-              Run by young people, for young people.
-            </h2>
-          </div>
-          <p className="max-w-lg text-lg text-ink-soft lg:justify-self-end" data-reveal>
-            MMUN is a non-profit made up wholly of youth from diverse backgrounds. The secretariat plans every committee,
-            speaker and night of the conference. Turn a card over to meet them.
-          </p>
-        </div>
-
-        <ul className="mt-16 grid gap-6 [perspective:1600px] md:grid-cols-2 lg:grid-cols-3">
-          {team.map((m, i) => {
-            const isFlipped = flipped === m.name
-            const contact = contacts.find((c) => c.name === m.name)
-            return (
-              <li key={m.name} data-team-card className="grid gap-3" style={{ transitionDelay: `${i * 60}ms` }}>
-                <button
-                  type="button"
-                  onClick={() => setFlipped(isFlipped ? null : m.name)}
-                  aria-pressed={isFlipped}
-                  data-cursor="Flip"
-                  data-tilt
-                  className="group relative block h-[19rem] w-full text-left [transform-style:preserve-3d] sm:h-[23rem]"
-                >
-                  <span
-                    className={`relative block size-full rounded-[1.75rem] transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${
-                      isFlipped ? '[transform:rotateY(180deg)]' : ''
-                    }`}
-                  >
-                    {/* Front */}
-                    <span className={`absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[1.75rem] p-8 [backface-visibility:hidden] ${m.tint}`}>
-                      <span className="flex items-start justify-between">
-                        <span className="font-mono text-xs tracking-[0.2em] uppercase opacity-80">{m.group}</span>
-                        <Crown className="h-7 w-9 opacity-70" />
-                      </span>
-                      <span aria-hidden className="font-display text-[5.5rem] leading-none font-medium tracking-[-0.06em] opacity-95 transition-transform duration-700 group-hover:-translate-y-2 sm:text-[7rem]">
-                        {m.initials}
-                      </span>
-                      <span>
-                        <span className="block font-display text-3xl">{m.name}</span>
-                        <span className="mt-1 block font-mono text-xs tracking-[0.18em] uppercase opacity-80">{m.role}</span>
-                        <span className="mt-4 inline-flex items-center gap-2 font-mono text-xs tracking-[0.18em] uppercase opacity-80">
-                          <span aria-hidden className="grid size-7 place-items-center rounded-full border-2 border-current">↻</span>
-                          <span className="pointer-coarse:hidden">Click to turn over</span>
-                          <span className="hidden pointer-coarse:inline">Tap to turn over</span>
-                        </span>
-                      </span>
-                    </span>
-                    {/* Back */}
-                    <span className="absolute inset-0 flex flex-col justify-between rounded-[1.75rem] bg-ink p-8 text-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
-                      <span className="font-mono text-xs tracking-[0.2em] uppercase opacity-80">{m.role}</span>
-                      <span className="text-lg">{m.about}</span>
-                      <span className="text-white/85">{org.email}</span>
-                    </span>
-                  </span>
-                </button>
-                {contact ? (
-                  <a href={`tel:${contact.tel}`} className="btn btn-line w-full">
-                    Call {m.name.replace(/^Md\.\s*/, '').split(' ')[0]} · {contact.phone} <Arrow className="size-4" />
-                  </a>
-                ) : (
-                  <a href={org.whatsappCommunity} target="_blank" rel="noopener" className="btn btn-line w-full">
-                    Ask about becoming one <Arrow className="size-4" />
-                  </a>
-                )}
-              </li>
-            )
-          })}
-        </ul>
       </div>
     </section>
   )
@@ -283,7 +197,7 @@ export function Placard() {
             ref={card}
             className={`placard relative w-full max-w-[34rem] transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${raised ? 'is-raised' : ''}`}
           >
-            <div key={flipKey} className={`placard-face animate-[placard-in_0.8s_cubic-bezier(0.22,1,0.36,1)] overflow-hidden rounded-2xl shadow-[0_50px_80px_-40px_rgb(19_34_58/0.7)] ${tint}`}>
+            <div key={flipKey} className={`placard-face animate-[placard-in_0.8s_cubic-bezier(0.22,1,0.36,1)] overflow-hidden rounded-2xl shadow-[0_50px_80px_-40px_rgb(43_9_6/0.7)] ${tint}`}>
               <div className="flex items-center justify-between gap-4 bg-card px-5 py-3 text-ink">
                 <span className="font-mono text-[0.7rem] tracking-[0.2em] uppercase">Meghalaya Model United Nations</span>
                 <Crown className="h-5 w-7 text-un" />

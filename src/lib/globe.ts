@@ -83,8 +83,8 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
 
     // Ocean disc with a soft rim
     const g = ctx.createRadialGradient(w / 2 - r * 0.3, h / 2 - r * 0.35, r * 0.1, w / 2, h / 2, r)
-    g.addColorStop(0, '#3f8ae0')
-    g.addColorStop(1, '#1f5aa6')
+    g.addColorStop(0, '#a3140a')
+    g.addColorStop(1, '#5c0000')
     ctx.fillStyle = g
     ctx.beginPath()
     ctx.arc(w / 2, h / 2, r, 0, Math.PI * 2)
@@ -115,7 +115,7 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
       const p = project(DOTS[i], DOTS[i + 1], lam, ph)
       if (p.z <= 0.02) continue
       ctx.globalAlpha = 0.35 + p.z * 0.65
-      ctx.fillStyle = '#fffcf5'
+      ctx.fillStyle = '#f5e5cc'
       ctx.beginPath()
       ctx.arc(p.x, p.y, size * (0.65 + p.z * 0.45), 0, Math.PI * 2)
       ctx.fill()
@@ -127,17 +127,17 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
     if (home.z > 0) {
       for (let k = 0; k < 3; k++) {
         const phase = ((t / 1600 + k / 3) % 1 + 1) % 1
-        ctx.strokeStyle = `rgba(242,107,29,${(1 - phase) * 0.9})`
+        ctx.strokeStyle = `rgba(255,158,15,${(1 - phase) * 0.9})`
         ctx.lineWidth = 2
         ctx.beginPath()
         ctx.arc(home.x, home.y, 6 + phase * r * 0.18, 0, Math.PI * 2)
         ctx.stroke()
       }
-      ctx.fillStyle = '#f26b1d'
+      ctx.fillStyle = '#ff9e0f'
       ctx.beginPath()
       ctx.arc(home.x, home.y, 6, 0, Math.PI * 2)
       ctx.fill()
-      ctx.fillStyle = '#fffcf5'
+      ctx.fillStyle = '#f5e5cc'
       ctx.beginPath()
       ctx.arc(home.x, home.y, 2.4, 0, Math.PI * 2)
       ctx.fill()
@@ -152,13 +152,13 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
         const lx = right + tw + 14 > w ? home.x - r * 0.2 - 8 - tw : right
         const ly = home.y - fs * 0.9
         ctx.globalAlpha = Math.min(1, (home.z - 0.35) * 3)
-        ctx.fillStyle = '#13223a'
+        ctx.fillStyle = '#2b0906'
         ctx.beginPath()
         ctx.roundRect(lx - 10, ly - fs, tw + 20, fs * 1.8, fs * 0.9)
         ctx.fill()
-        ctx.fillStyle = '#fffcf5'
+        ctx.fillStyle = '#f5e5cc'
         ctx.fillText(label, lx, ly + fs * 0.35)
-        ctx.strokeStyle = 'rgba(19,34,58,0.9)'
+        ctx.strokeStyle = 'rgba(43,9,6,0.9)'
         ctx.lineWidth = 1.5
         ctx.beginPath()
         const flipped = lx < home.x

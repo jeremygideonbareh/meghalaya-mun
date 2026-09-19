@@ -86,7 +86,7 @@ export function Theme() {
             <p data-theme-word className="mt-4 font-display text-[clamp(3.2rem,13vw,15rem)] leading-[1.05] font-medium tracking-[-0.04em] opacity-0">
               {w.word}
             </p>
-            <p data-theme-rest className="mx-auto mt-6 max-w-xl rounded-2xl bg-ink/50 p-4 text-lg opacity-0 backdrop-blur-sm [text-shadow:0_1px_14px_rgb(19_34_58/0.8)] sm:bg-transparent sm:p-0 sm:text-xl sm:backdrop-blur-none">
+            <p data-theme-rest className="mx-auto mt-6 max-w-xl rounded-2xl bg-ink/50 p-4 text-lg opacity-0 backdrop-blur-sm [text-shadow:0_1px_14px_rgb(43_9_6/0.8)] sm:bg-transparent sm:p-0 sm:text-xl sm:backdrop-blur-none">
               {w.body}
             </p>
           </div>
@@ -175,7 +175,7 @@ export function Committees() {
                   >
                     {/* Front */}
                     <span
-                      className={`absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[1.75rem] p-7 shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [backface-visibility:hidden] sm:p-8 ${c.tint}`}
+                      className={`absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[1.75rem] p-7 shadow-[0_30px_60px_-30px_rgb(43_9_6/0.6)] [backface-visibility:hidden] sm:p-8 ${c.tint}`}
                     >
                       <Crown aria-hidden className="pointer-events-none absolute -top-6 -right-8 w-44 opacity-[0.09]" />
                       <span className="relative flex items-start justify-between">
@@ -195,7 +195,7 @@ export function Committees() {
                       </span>
                     </span>
                     {/* Back */}
-                    <span className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[1.75rem] bg-ink p-7 text-white shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [backface-visibility:hidden] [transform:rotateY(180deg)] sm:p-8">
+                    <span className="absolute inset-0 flex flex-col justify-between overflow-hidden rounded-[1.75rem] bg-ink p-7 text-white shadow-[0_30px_60px_-30px_rgb(43_9_6/0.6)] [backface-visibility:hidden] [transform:rotateY(180deg)] sm:p-8">
                       <span className="flex items-center justify-between">
                         <span className="font-display text-4xl">{c.code}</span>
                         <Icon className="size-10 text-orange" />
@@ -228,7 +228,7 @@ export function Speaker() {
       <div
         data-spot-light
         aria-hidden
-        className="pointer-events-none absolute top-0 left-0 size-[38rem] rounded-full max-lg:hidden bg-[radial-gradient(circle,rgb(207_226_245/0.95)_0%,transparent_65%)]"
+        className="pointer-events-none absolute top-0 left-0 size-[38rem] rounded-full max-lg:hidden bg-[radial-gradient(circle,rgb(255_204_153/0.9)_0%,transparent_65%)]"
       />
       <div className="wrap relative grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
         <div data-spot-frame className="relative overflow-hidden rounded-[1.75rem]" data-cursor="UNODC">
@@ -289,7 +289,7 @@ export function Frames() {
                   setOpen(i)
                 }}
                 data-cursor="View"
-                className="reel-item absolute top-0 left-0 block w-[58vw] overflow-hidden rounded-[1.25rem] bg-ink text-left shadow-[0_30px_60px_-30px_rgb(19_34_58/0.6)] [backface-visibility:visible] sm:w-[19rem] lg:w-[21rem]"
+                className="reel-item absolute top-0 left-0 block w-[58vw] overflow-hidden rounded-[1.25rem] bg-ink text-left shadow-[0_30px_60px_-30px_rgb(43_9_6/0.6)] [backface-visibility:visible] sm:w-[19rem] lg:w-[21rem]"
               >
                 <Picture name={g.image} alt={g.caption} sizes="(min-width: 1024px) 21rem, 58vw" className="aspect-[3/4] w-full object-cover" />
               </button>
@@ -395,7 +395,7 @@ export function Recognition() {
             <li
               key={r.title}
               data-stack-card
-              className={`flex flex-col justify-between gap-8 rounded-[1.75rem] p-7 shadow-[0_40px_70px_-35px_rgb(19_34_58/0.55)] sm:p-9 lg:absolute lg:inset-0 ${stackTints[i % stackTints.length]}`}
+              className={`flex flex-col justify-between gap-8 rounded-[1.75rem] p-7 shadow-[0_40px_70px_-35px_rgb(43_9_6/0.55)] sm:p-9 lg:absolute lg:inset-0 ${stackTints[i % stackTints.length]}`}
               style={{ zIndex: i + 1 }}
             >
               <div className="flex items-start justify-between gap-6">

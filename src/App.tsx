@@ -3,7 +3,9 @@ import { Committees, Frames, Join, Manifesto, Numbers, Partners, Recognition, Sp
 import { Chrome } from './components/Chrome'
 import { Footer } from './components/Footer'
 import { Hero } from './components/Hero'
-import { Placard, Team, World } from './components/Interactive'
+import { Placard, World } from './components/Interactive'
+import { Team } from './components/Team'
+import { Guides } from './components/Guides'
 
 export default function App() {
   useEffect(() => {
@@ -50,6 +52,7 @@ export default function App() {
             <Recognition />
             <Partners />
             <Placard />
+            <Guides />
             <Join />
           </main>
           <Footer />

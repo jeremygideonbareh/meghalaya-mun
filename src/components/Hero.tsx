@@ -12,7 +12,7 @@ export function Hero() {
         ))}
         {/* A UN-blue wash keeps the photos bright; the lower half deepens so the title always reads */}
         <div data-hero-shade className="absolute inset-0 bg-un mix-blend-multiply opacity-25 sm:opacity-50" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(19_34_58/0.45)_0%,rgb(19_34_58/0)_22%,rgb(19_34_58/0.2)_42%,rgb(19_34_58/0.94)_72%)] sm:bg-[linear-gradient(180deg,rgb(19_34_58/0.6)_0%,rgb(19_34_58/0)_28%,rgb(19_34_58/0.35)_50%,rgb(19_34_58/0.94)_82%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(43_9_6/0.45)_0%,rgb(43_9_6/0)_22%,rgb(43_9_6/0.2)_42%,rgb(43_9_6/0.94)_72%)] sm:bg-[linear-gradient(180deg,rgb(43_9_6/0.6)_0%,rgb(43_9_6/0)_28%,rgb(43_9_6/0.35)_50%,rgb(43_9_6/0.94)_82%)]" />
       </div>
 
       <div className="wrap relative flex h-full flex-col justify-end pb-10 sm:pb-14">
