@@ -101,7 +101,7 @@ export function createCrown(canvas: HTMLCanvasElement, animate: boolean): CrownA
   let scrollTurn = 0
   const onMove = (e: PointerEvent) => {
     const r = canvas.getBoundingClientRect()
-    targetY = ((e.clientX - r.left) / r.width - 0.5) * 0.9
+    targetY = Math.max(-0.35, Math.min(0.35, ((e.clientX - r.left) / r.width - 0.5) * 0.9))
     targetX = ((e.clientY - r.top) / r.height - 0.5) * 0.5
   }
   window.addEventListener('pointermove', onMove)
@@ -112,7 +112,7 @@ export function createCrown(canvas: HTMLCanvasElement, animate: boolean): CrownA
     renderer.setSize(r.width, r.height, false)
     camera.aspect = r.width / Math.max(1, r.height)
     // pull the camera back on narrow screens so the whole crown fits
-    camera.position.z = camera.aspect < 0.8 ? 15 : camera.aspect < 1.4 ? 12.5 : 9
+    camera.position.z = camera.aspect < 0.8 ? 15.5 : camera.aspect < 1.4 ? 13 : 10.5
     camera.updateProjectionMatrix()
   }
   const ro = new ResizeObserver(resize)
@@ -124,7 +124,7 @@ export function createCrown(canvas: HTMLCanvasElement, animate: boolean): CrownA
   const start = performance.now()
   const frame = (now: number) => {
     const t = (now - start) / 1000
-    crown.rotation.y += (targetY + scrollTurn + Math.sin(t * 0.5) * 0.25 - crown.rotation.y) * 0.06
+    crown.rotation.y += (0.26 + targetY + scrollTurn + Math.sin(t * 0.5) * 0.18 - crown.rotation.y) * 0.06
     crown.rotation.x += (targetX + Math.sin(t * 0.7) * 0.05 - crown.rotation.x) * 0.06
     crown.position.y = Math.sin(t * 1.1) * 0.12
     renderer.render(scene, camera)
@@ -141,10 +141,10 @@ export function createCrown(canvas: HTMLCanvasElement, animate: boolean): CrownA
 
   return {
     scroll: (p) => {
-      // a full turn and a bit across the section
-      scrollTurn = p * Math.PI * 2.2
+      // a sway across the section, never so far that the crown turns edge-on
+      scrollTurn = Math.sin(p * Math.PI * 2) * 0.55
       if (!animate) {
-        crown.rotation.y = scrollTurn
+        crown.rotation.y = 0.26 + scrollTurn
         renderer.render(scene, camera)
       }
     },

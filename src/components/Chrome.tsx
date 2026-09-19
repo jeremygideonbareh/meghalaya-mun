@@ -164,7 +164,8 @@ function MotionToggle() {
     >
       <span aria-hidden className={`size-2.5 rounded-full ${on ? 'bg-orange-deep' : 'bg-ink-soft'}`} />
       <span className="hidden sm:inline">Motion {on ? 'on' : 'off'}</span>
-      <span className="sr-only sm:hidden">Motion is {on ? 'on' : 'off'}</span>
+      <span aria-hidden className="text-xs tracking-wide uppercase sm:hidden">{on ? 'On' : 'Off'}</span>
+      <span className="sr-only sm:hidden">Motion</span>
     </button>
   )
 }

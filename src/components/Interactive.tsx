@@ -89,7 +89,7 @@ export function World() {
 export function Team() {
   const [flipped, setFlipped] = useState<string | null>(null)
   return (
-    <section id="team" data-chapter="The team" className="relative overflow-hidden bg-paper py-20 sm:py-28" aria-labelledby="team-title">
+    <section id="team" data-chapter="The team" className="relative overflow-hidden bg-paper pt-6 pb-20 sm:pt-10 sm:pb-28" aria-labelledby="team-title">
       <div className="wrap">
         <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-end">
           <div>
@@ -147,16 +147,13 @@ export function Team() {
                     <span className="absolute inset-0 flex flex-col justify-between rounded-[1.75rem] bg-ink p-8 text-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
                       <span className="font-mono text-xs tracking-[0.2em] uppercase opacity-80">{m.role}</span>
                       <span className="text-lg">{m.about}</span>
-                      <span className="grid gap-2">
-                        {contact && <span className="font-display text-2xl">{contact.phone}</span>}
-                        <span className="text-white/85">{org.email}</span>
-                      </span>
+                      <span className="text-white/85">{org.email}</span>
                     </span>
                   </span>
                 </button>
                 {contact ? (
                   <a href={`tel:${contact.tel}`} className="btn btn-line w-full">
-                    Call {m.name.split(' ')[0]} · {contact.phone} <Arrow className="size-4" />
+                    Call {m.name.replace(/^Md\.\s*/, '').split(' ')[0]} · {contact.phone} <Arrow className="size-4" />
                   </a>
                 ) : (
                   <a href={org.whatsappCommunity} target="_blank" rel="noopener" className="btn btn-line w-full">
@@ -221,8 +218,8 @@ export function Placard() {
 
   return (
     <section id="placard" data-chapter="Your placard" className="relative overflow-hidden bg-sky py-20 sm:py-28" aria-labelledby="placard-title">
-      <div className="wrap grid grid-cols-[minmax(0,1fr)] items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-20">
-        <div className="min-w-0">
+      <div className="wrap grid grid-cols-[minmax(0,1fr)] items-center gap-x-20 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:grid-rows-[auto_auto] lg:gap-y-0">
+        <div className="min-w-0 lg:self-end">
           <p className="kicker text-un-deep" data-reveal>
             Try it on
           </p>
@@ -232,8 +229,10 @@ export function Placard() {
           <p className="mt-6 max-w-md text-lg text-ink" data-reveal>
             In committee, you speak only when your placard goes up. Pick a nation and a committee, and see yours.
           </p>
+        </div>
 
-          <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]" data-reveal>
+        <div className="order-last min-w-0 lg:order-none lg:col-start-1 lg:row-start-2 lg:self-start">
+          <div className="grid lg:mt-10 grid-cols-[minmax(0,1fr)] gap-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]" data-reveal>
             <label className="grid min-w-0 gap-2">
               <span className="font-mono text-xs tracking-[0.18em] uppercase">Your nation</span>
               <select
@@ -278,7 +277,7 @@ export function Placard() {
           </div>
         </div>
 
-        <div className="relative grid h-[20rem] min-w-0 place-items-center [perspective:1100px] sm:h-[30rem]" aria-live="polite">
+        <div className="relative grid h-[15rem] min-w-0 place-items-center [perspective:1100px] sm:h-[24rem] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:h-[30rem]" aria-live="polite">
           <div
             ref={card}
             className={`placard relative w-full max-w-[34rem] transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${raised ? 'is-raised' : ''}`}

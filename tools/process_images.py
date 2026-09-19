@@ -53,7 +53,7 @@ BROCHURE = {
 
 # Instagram: the guest-speaker poster (portrait crop of the photo inside it)
 INSTAGRAM = {
-    "speaker-kharshiing": ("car_Dc0OWe-yQDC_0.jpg", (0.18, 0.19, 0.82, 0.60)),
+    "speaker-kharshiing": ("car_Dc0OWe-yQDC_0.jpg", (0.2, 0.2, 0.8, 0.555)),
 }
 COVERS = {"logo": "profile.jpg"}
 

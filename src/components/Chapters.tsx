@@ -275,7 +275,7 @@ export function Frames() {
       </div>
 
       {/* A 3D reel of every photo: scroll turns it, drag spins it, tap opens one */}
-      <div data-reel className="reel relative mt-10 h-[78svh] min-h-[30rem] touch-pan-y select-none sm:mt-14">
+      <div data-reel className="reel relative mt-6 h-[62svh] min-h-[26rem] sm:mt-14 sm:h-[78svh] sm:min-h-[30rem] touch-pan-y select-none">
         <div className="reel-stage absolute inset-0 [perspective:1300px]">
           <div data-reel-ring className="reel-ring absolute top-1/2 left-1/2 [transform-style:preserve-3d]">
             {gallery.map((g, i) => (

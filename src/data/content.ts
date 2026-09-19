@@ -65,7 +65,7 @@ export const manifesto =
   'Meghalaya Model United Nations is a youth organisation educating the young people of Meghalaya, and of Northeast India, about the issues shaping the world, through dialogue and discussion built on the processes and ideals of the United Nations.'
 
 export const stats = [
-  { value: 950, suffix: '+', label: 'Delegates in 2025, national and international' },
+  { value: 950, suffix: '+', label: 'Delegates at the 2025 edition, national and international' },
   { value: 7, suffix: 'th', label: 'International edition, held in Shillong' },
   { value: 8, suffix: '', label: 'Committees in session over three days' },
   { value: 12, suffix: '', label: 'Districts of Meghalaya, all backing MMUN' },
@@ -122,7 +122,7 @@ export const committees: Committee[] = [
     code: 'JPC',
     name: 'Joint Parliamentary Committee',
     kind: 'india',
-    tint: 'bg-un-deep text-white',
+    tint: 'bg-orange-deep text-white',
     body: 'An ad hoc committee of the Lok Sabha and Rajya Sabha that investigates a matter of national importance, from financial irregularities to corporate misconduct.',
   },
   {
@@ -202,7 +202,7 @@ export const recognitions = [
   },
   {
     title: 'North Eastern Hill University',
-    body: 'MMUN 2025 was recognised and supported by NEHU, and by the Department and Directorate of Sports and Youth Affairs.',
+    body: 'The 2025 edition of MMUN was recognised and supported by NEHU, and by the Department and Directorate of Sports and Youth Affairs.',
   },
   {
     title: 'Election Commission programmes',

@@ -18,6 +18,8 @@ const q = <T extends Element = HTMLElement>(sel: string, root: ParentNode = docu
  * so components stay declarative. Returns a cleanup that reverts it all.
  */
 export function startCinema() {
+  // phones: the address bar showing and hiding must not re-measure the pins
+  ScrollTrigger.config({ ignoreMobileResize: true })
   const ctx = gsap.context(() => {
     const mm = gsap.matchMedia()
 
@@ -388,6 +390,7 @@ function recognition() {
   // Desktop: the section pins and the cards deal onto the pile one by one,
   // each new card sliding up as the one beneath it sinks and tilts away.
   mm.add(DESKTOP, () => {
+    gsap.set(cards, { filter: 'brightness(1)' })
     gsap.set(cards.slice(1), { yPercent: 150, rotate: 6, autoAlpha: 0 })
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -407,7 +410,7 @@ function recognition() {
       const at = i - 1
       tl.set(card, { autoAlpha: 1 }, at).to(card, { yPercent: 0, rotate: i % 2 ? -1.5 : 1.5, duration: 1, ease: 'power2.out' }, at).to(
         cards[i - 1],
-        { scale: 0.9, yPercent: -6, rotate: i % 2 ? 3 : -3, filter: 'brightness(0.8)', duration: 1, ease: 'power2.out' },
+        { scale: 0.9, yPercent: -6, rotate: i % 2 ? 3 : -3, filter: 'brightness(0.85)', duration: 1, ease: 'power2.out' },
         at,
       )
     })
@@ -547,8 +550,15 @@ function cursor() {
   const ry = gsap.quickTo(ring, 'y', { duration: 0.55, ease: 'power3' })
   const tx = gsap.quickTo(text, 'x', { duration: 0.35, ease: 'power3' })
   const ty = gsap.quickTo(text, 'y', { duration: 0.35, ease: 'power3' })
-  gsap.set([dot, ring], { xPercent: -50, yPercent: -50, autoAlpha: 1 })
+  gsap.set([dot, ring], { xPercent: -50, yPercent: -50, autoAlpha: 0 })
+  let shown = false
   window.addEventListener('pointermove', (e) => {
+    if (!shown) {
+      // jump to the pointer first, so the cursor never flies in from a corner
+      shown = true
+      gsap.set([dot, ring], { x: e.clientX, y: e.clientY })
+      gsap.to([dot, ring], { autoAlpha: 1, duration: 0.3 })
+    }
     dx(e.clientX)
     dy(e.clientY)
     rx(e.clientX)

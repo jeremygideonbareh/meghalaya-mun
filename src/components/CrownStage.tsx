@@ -3,7 +3,7 @@ import type { CrownApi } from '../lib/crown3d'
 
 /**
  * The MMUN crown in real 3D (three.js), loaded only as it approaches the
- * screen. It turns a full circle as you scroll past and leans to the pointer.
+ * screen. It sways as you scroll past and leans to the pointer.
  */
 export function CrownStage() {
   const stage = useRef<HTMLDivElement>(null)
@@ -60,13 +60,13 @@ export function CrownStage() {
     <div ref={stage} data-crown-stage className="crown-stage relative h-[44svh] min-h-[18rem] sm:h-[58svh]">
       <canvas
         ref={canvas}
-        className="absolute inset-0 size-full"
+        className="absolute inset-x-0 top-0 bottom-12 h-[calc(100%-3rem)] w-full"
         role="img"
         aria-label="The MMUN crown in 3D, turning slowly"
       />
       <p className="pointer-events-none absolute inset-x-0 bottom-4 text-center font-mono text-xs tracking-[0.2em] text-white/80 uppercase">
         <span className="pointer-coarse:hidden">Move your pointer to turn the crown</span>
-        <span className="hidden pointer-coarse:inline">Scroll to turn the crown</span>
+        <span className="hidden pointer-coarse:inline">Scroll to sway the crown</span>
       </p>
     </div>
   )
