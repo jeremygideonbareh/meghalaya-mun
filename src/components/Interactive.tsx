@@ -53,10 +53,20 @@ export function World() {
           <p className="mt-8 border-t-2 border-white/30 pt-6 font-display text-2xl sm:text-3xl" data-reveal>
             Delegates from <span className="underline decoration-orange decoration-4 underline-offset-8">3+ nations</span>, in the heart of the Khasi Hills.
           </p>
-          <p className="mt-8 flex items-center gap-3 font-mono text-xs tracking-[0.18em] text-white uppercase">
-            <span aria-hidden className="grid size-8 place-items-center rounded-full border-2 border-white/60">↔</span>
-            Drag the globe to spin it
-          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <p className="flex items-center gap-3 font-mono text-xs tracking-[0.18em] text-white uppercase">
+              <span aria-hidden className="grid size-8 place-items-center rounded-full border-2 border-white/60">↔</span>
+              Drag the globe to spin it
+            </p>
+            <button
+              type="button"
+              onClick={() => api.current?.home()}
+              className="rounded-full bg-orange px-5 py-2.5 font-mono text-xs font-semibold tracking-[0.18em] text-ink uppercase transition-transform hover:-translate-y-0.5"
+              data-magnet
+            >
+              Fly to Shillong
+            </button>
+          </div>
         </div>
 
         <div data-world-stage className="relative mx-auto aspect-square w-full max-w-[40rem] [perspective:1200px]">

@@ -14,6 +14,8 @@ export type GlobeOptions = {
 export type GlobeApi = {
   /** rotate so that this lng/lat faces the viewer, blended by `amount` 0..1 */
   steer: (amount: number) => void
+  /** fly back to Shillong, undoing any drag */
+  home: () => void
   destroy: () => void
 }
 
@@ -31,9 +33,15 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
   // Rotation state: longitude spin (lambda) and tilt (phi)
   let lambda = -20
   let phi = -18
-  let velocity = 0.06
+  // What the visitor adds by dragging sits on top of the scroll steer, so
+  // the globe answers the hand even once it has turned to face Shillong
+  let offLam = 0
+  let offPhi = 0
+  let velocity = 0
   let steerAmount = 0
   let dragging = false
+  let lastTouch = -1e9
+  let homing = false
   let lastX = 0
   let lastY = 0
   let raf = 0
@@ -67,8 +75,8 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
     // Blend free rotation with "face Shillong" as the page asks
     // take the short way round, however many turns the globe has made
     const diff = ((((-HOME.lng - lambda) % 360) + 540) % 360) - 180
-    const lam = lambda + diff * steerAmount
-    const ph = phi + (HOME.lat - phi) * steerAmount
+    const lam = lambda + diff * steerAmount + offLam
+    const ph = Math.max(-75, Math.min(75, phi + (HOME.lat - phi) * steerAmount + offPhi))
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     ctx.clearRect(0, 0, w, h)
@@ -139,7 +147,9 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
         ctx.font = `600 ${fs}px "Geist Mono Variable", monospace`
         const label = 'SHILLONG'
         const tw = ctx.measureText(label).width
-        const lx = home.x + r * 0.2 + 8
+        // flip to the left of the beacon when the right would run off the canvas
+        const right = home.x + r * 0.2 + 8
+        const lx = right + tw + 14 > w ? home.x - r * 0.2 - 8 - tw : right
         const ly = home.y - fs * 0.9
         ctx.globalAlpha = Math.min(1, (home.z - 0.35) * 3)
         ctx.fillStyle = '#13223a'
@@ -151,8 +161,9 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
         ctx.strokeStyle = 'rgba(19,34,58,0.9)'
         ctx.lineWidth = 1.5
         ctx.beginPath()
-        ctx.moveTo(home.x + 6, home.y)
-        ctx.lineTo(lx - 10, ly)
+        const flipped = lx < home.x
+        ctx.moveTo(home.x + (flipped ? -6 : 6), home.y)
+        ctx.lineTo(flipped ? lx + tw + 10 : lx - 10, ly)
         ctx.stroke()
         ctx.globalAlpha = 1
       }
@@ -161,10 +172,21 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
 
   const tick = (now: number) => {
     t = now
+    lambda += 0.06 // slow cruise, hidden once the scroll has steered home
     if (!dragging) {
-      lambda += velocity
-      // ease back to a gentle cruise after a flick
-      velocity += (0.06 - velocity) * 0.02
+      // a flick keeps spinning, then friction takes it
+      offLam += velocity
+      velocity *= 0.95
+      // after a pause, drift back so Shillong faces the viewer again
+      if (homing || now - lastTouch > 2600) {
+        const back = ((offLam % 360) + 540) % 360 - 180
+        offLam = back * 0.95
+        offPhi *= 0.95
+        if (Math.abs(offLam) < 0.05 && Math.abs(offPhi) < 0.05) {
+          offLam = offPhi = 0
+          homing = false
+        }
+      }
     }
     draw()
     if (visible) raf = requestAnimationFrame(tick)
@@ -173,8 +195,10 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
   // Horizontal drag spins; vertical drag tilts a little. Page scroll is left alone.
   const down = (e: PointerEvent) => {
     dragging = true
+    homing = false
     lastX = e.clientX
     lastY = e.clientY
+    lastTouch = performance.now()
     velocity = 0
     canvas.setPointerCapture(e.pointerId)
     canvas.style.cursor = 'grabbing'
@@ -186,13 +210,15 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
     lastX = e.clientX
     lastY = e.clientY
     const k = 180 / (Math.PI * r)
-    lambda += dx * k
-    phi = Math.max(-60, Math.min(60, phi + dy * k * 0.6))
+    offLam += dx * k
+    offPhi = Math.max(-60, Math.min(60, offPhi + dy * k * 0.6))
     velocity = dx * k
+    lastTouch = performance.now()
     if (!opts.animate) draw()
   }
   const up = (e: PointerEvent) => {
     dragging = false
+    lastTouch = performance.now()
     canvas.releasePointerCapture?.(e.pointerId)
     canvas.style.cursor = 'grab'
   }
@@ -227,6 +253,14 @@ export function createGlobe(canvas: HTMLCanvasElement, opts: GlobeOptions): Glob
     steer: (amount) => {
       steerAmount = Math.max(0, Math.min(1, amount))
       if (!opts.animate) draw()
+    },
+    home: () => {
+      velocity = 0
+      if (opts.animate) homing = true
+      else {
+        offLam = offPhi = 0
+        draw()
+      }
     },
     destroy: () => {
       cancelAnimationFrame(raf)
