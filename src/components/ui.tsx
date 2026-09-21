@@ -1,5 +1,6 @@
 import type { ImgHTMLAttributes, SVGProps } from 'react'
 import { img } from '../lib/img'
+import logo from '../data/logo.json'
 
 type PictureProps = {
   name: string
@@ -27,28 +28,36 @@ export function Picture({ name, alt, sizes, eager, className, ...rest }: Picture
   )
 }
 
-/** The MMUN crown, drawn as line art so it can be stroked and animated. */
-export function Crown({ filled, ...p }: SVGProps<SVGSVGElement> & { filled?: boolean }) {
+/**
+ * The official MMUN logo, traced from the secretariat's artwork by
+ * tools/trace_logo.py. Both shapes are defined once in <LogoDefs /> and
+ * drawn with <use>, so the page carries the paths a single time.
+ */
+export function LogoDefs() {
   return (
-    <svg viewBox="0 0 120 90" fill="none" aria-hidden {...p}>
-      <path
-        d="M14 64 8 26l22 18 10-30 12 26 8-34 8 34 12-26 10 30 22-18-6 38Z"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinejoin="round"
-        fill={filled ? 'currentColor' : 'none'}
-        fillOpacity={filled ? 0.12 : 0}
-      />
-      <path d="M16 72h88M19 80h82" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-      {[
-        [8, 26],
-        [40, 14],
-        [60, 6],
-        [80, 14],
-        [112, 26],
-      ].map(([cx, cy]) => (
-        <circle key={cx} cx={cx} cy={cy} r="3.6" fill="currentColor" />
-      ))}
+    <svg width="0" height="0" className="absolute" aria-hidden focusable="false">
+      <defs>
+        <path id="mmun-crown" fillRule="evenodd" d={logo.crown.d} />
+        <path id="mmun-wordmark" fillRule="evenodd" d={logo.wordmark.d} />
+      </defs>
+    </svg>
+  )
+}
+
+/** The MMUN crown, filled in the current text colour. */
+export function Crown(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox={`0 0 ${logo.crown.width} ${logo.crown.height}`} fill="currentColor" aria-hidden {...p}>
+      <use href="#mmun-crown" />
+    </svg>
+  )
+}
+
+/** The MMUN lettering from the logo lockup. */
+export function Wordmark(p: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox={`0 0 ${logo.wordmark.width} ${logo.wordmark.height}`} fill="currentColor" aria-hidden {...p}>
+      <use href="#mmun-wordmark" />
     </svg>
   )
 }

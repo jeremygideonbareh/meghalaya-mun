@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Menu } from './Menu'
-import { Crown } from './ui'
+import { Crown, Wordmark } from './ui'
 
 export function Chrome() {
   return (
@@ -46,8 +46,8 @@ function Nav() {
             className="pointer-events-auto flex min-h-11 items-center gap-3 rounded-full bg-paper py-1.5 pr-5 pl-4 shadow-[0_6px_24px_-12px_rgb(43_9_6/0.5)] backdrop-blur-md"
             aria-label="MMUN, back to the top"
           >
-            <Crown className="h-6 w-8 text-un" />
-            <span className="font-display text-xl font-semibold tracking-wide text-ink">MMUN</span>
+            <Crown className="h-7 w-auto text-un" />
+            <Wordmark className="h-3.5 w-auto text-ink" />
           </a>
 
           <div className="pointer-events-none hidden items-center gap-3 rounded-full bg-paper px-5 py-2.5 text-[0.78rem] font-bold tracking-[0.28em] text-ink uppercase shadow-[0_6px_24px_-12px_rgb(43_9_6/0.5)] backdrop-blur-md md:flex">

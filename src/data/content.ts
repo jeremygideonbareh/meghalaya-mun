@@ -320,8 +320,9 @@ export const contacts = [
   { name: 'Md. Rezaul Islam', role: 'Chef de Cabinet', phone: '+91 75780 95386', tel: '+917578095386' },
 ]
 
-// Delegate resources: the secretariat's guides, cleaned into standalone
-// documents (no Executive Board letters, no references to any one edition).
+// Delegate resources: the secretariat's guides. The UNA-USA and AIPPM rules
+// are the secretariat's own formatted editions (Sept 2026); the first-MUN and
+// press guides are cleaned into standalone documents.
 export type Guide = {
   slug: string
   title: string
@@ -362,7 +363,7 @@ export const guides: Guide[] = [
     title: 'AIPPM rules of procedure',
     short: 'AIPPM ROP',
     audience: 'Indian committees',
-    pages: 5,
+    pages: 6,
     about: 'Question Hour, Zero Hour, calling attention, no-confidence, anti-defection and bills.',
     tone: 'bg-pine text-white',
     href: guideFile('aippm-rules-of-procedure'),

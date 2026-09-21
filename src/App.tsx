@@ -6,6 +6,7 @@ import { Hero } from './components/Hero'
 import { Placard, World } from './components/Interactive'
 import { Team } from './components/Team'
 import { Guides } from './components/Guides'
+import { LogoDefs } from './components/ui'
 
 export default function App() {
   useEffect(() => {
@@ -33,6 +34,7 @@ export default function App() {
 
   return (
     <>
+      <LogoDefs />
       <a href="#manifesto" className="sr-only z-[150] rounded-full bg-gold px-5 py-3 font-semibold text-ink focus:not-sr-only focus:fixed focus:top-4 focus:left-4">
         Skip the intro
       </a>

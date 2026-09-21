@@ -1,6 +1,6 @@
 import {
   AmbientLight,
-  CylinderGeometry,
+  Box3,
   DirectionalLight,
   ExtrudeGeometry,
   Group,
@@ -9,16 +9,16 @@ import {
   PerspectiveCamera,
   PointLight,
   Scene,
-  Shape,
-  SphereGeometry,
-  TorusGeometry,
+  Vector3,
   WebGLRenderer,
 } from 'three'
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
+import logo from '../data/logo.json'
 
 /**
- * MMUN's crown as a real 3D object: the logo's outline extruded into a solid,
- * two bands beneath it and five orange gems on the points. It floats, leans
- * towards the pointer, and turns as the page scrolls.
+ * MMUN's crown as a real 3D object: the official logo's silhouette, holes
+ * and all, extruded into a solid. It floats, leans towards the pointer, and
+ * turns as the page scrolls.
  */
 export type CrownApi = {
   /** 0..1 scroll progress through the section */
@@ -26,11 +26,8 @@ export type CrownApi = {
   destroy: () => void
 }
 
-// Outline of the crown from the logo, in its 120 x 90 drawing grid
-const OUTLINE: [number, number][] = [
-  [14, 64], [8, 26], [30, 44], [40, 14], [52, 40], [60, 6], [68, 40], [80, 14], [90, 44], [112, 26], [106, 64],
-]
-const GEMS: [number, number][] = [[8, 26], [40, 14], [60, 6], [80, 14], [112, 26]]
+// about 4.8 world units wide, so the tall crown fits the stage with room to bob
+const SCALE = 4.8 / logo.crown.width
 
 export function createCrown(canvas: HTMLCanvasElement, animate: boolean): CrownApi {
   const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' })
@@ -52,47 +49,27 @@ export function createCrown(canvas: HTMLCanvasElement, animate: boolean): CrownA
   fill.position.set(3, 3, 5)
   scene.add(fill)
 
-  // Build the crown in grid units, then centre and scale it down
-  const toWorld = ([x, y]: [number, number]) => [(x - 60) / 22, -(y - 45) / 22] as const
-  const shape = new Shape()
-  OUTLINE.forEach((p, i) => {
-    const [x, y] = toWorld(p)
-    if (i === 0) shape.moveTo(x, y)
-    else shape.lineTo(x, y)
+  // The logo's path, even-odd, becomes shapes with holes; extrude them
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="${logo.crown.d}"/></svg>`
+  const shapes = new SVGLoader().parse(svg).paths.flatMap((path) => SVGLoader.createShapes(path))
+  const geometry = new ExtrudeGeometry(shapes, {
+    depth: 60,
+    bevelEnabled: true,
+    bevelThickness: 6,
+    bevelSize: 2.5,
+    bevelSegments: 3,
   })
-  shape.closePath()
+  // SVG y runs down: turn it upright (a rotation keeps the faces facing out),
+  // scale to world units and centre on the origin
+  geometry.rotateX(Math.PI)
+  geometry.scale(SCALE, SCALE, SCALE)
+  geometry.computeBoundingBox()
+  const centre = (geometry.boundingBox ?? new Box3()).getCenter(new Vector3())
+  geometry.translate(-centre.x, -centre.y, -centre.z)
 
-  const blue = new MeshPhysicalMaterial({ color: 0xf5e5cc, roughness: 0.28, metalness: 0.15, clearcoat: 1, clearcoatRoughness: 0.15 })
-  const cream = new MeshPhysicalMaterial({ color: 0xff9e0f, roughness: 0.35, metalness: 0.05, clearcoat: 0.6 })
-  const orange = new MeshPhysicalMaterial({ color: 0xcf4504, roughness: 0.15, metalness: 0.1, clearcoat: 1, emissive: 0x7a3a00, emissiveIntensity: 0.35 })
-
+  const champagne = new MeshPhysicalMaterial({ color: 0xf5e5cc, roughness: 0.28, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.15 })
   const crown = new Group()
-  const body = new Mesh(
-    new ExtrudeGeometry(shape, { depth: 0.55, bevelEnabled: true, bevelThickness: 0.12, bevelSize: 0.08, bevelSegments: 4 }),
-    blue,
-  )
-  body.position.z = -0.275
-  crown.add(body)
-
-  // The two bands under the crown become rounded bars
-  for (const [y, w] of [[72, 88], [80, 82]] as const) {
-    const bar = new Mesh(new CylinderGeometry(0.13, 0.13, w / 22, 32), cream)
-    bar.rotation.z = Math.PI / 2
-    const [, wy] = toWorld([60, y])
-    bar.position.set(0, wy, 0)
-    crown.add(bar)
-  }
-
-  // Gems, each with a thin ring so they read as set stones
-  GEMS.forEach(([gx, gy]) => {
-    const [x, y] = toWorld([gx, gy])
-    const gem = new Mesh(new SphereGeometry(gy === 6 ? 0.27 : 0.22, 32, 24), orange)
-    gem.position.set(x, y, 0)
-    crown.add(gem)
-    const ring = new Mesh(new TorusGeometry(gy === 6 ? 0.3 : 0.25, 0.035, 12, 40), cream)
-    ring.position.set(x, y, 0)
-    crown.add(ring)
-  })
+  crown.add(new Mesh(geometry, champagne))
   scene.add(crown)
 
   // Pointer leaning and scroll turning
@@ -153,6 +130,8 @@ export function createCrown(canvas: HTMLCanvasElement, animate: boolean): CrownA
       io.disconnect()
       ro.disconnect()
       window.removeEventListener('pointermove', onMove)
+      geometry.dispose()
+      champagne.dispose()
       renderer.dispose()
     },
   }
