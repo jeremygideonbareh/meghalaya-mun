@@ -287,7 +287,6 @@ export const team: Member[] = [
   { name: 'Salzya M. Sangma', role: 'Director General, GHMUN', also: 'USG Hospitality', council: 'secretariat' },
   { name: 'Pragya Shandilya', role: 'Joint USG, Delegate Affairs', council: 'secretariat', photo: 'team-pragya-shandilya' },
   { name: 'Anuchaya Goswami', role: 'Joint USG, Delegate Affairs', council: 'secretariat', photo: 'team-anuchaya-goswami' },
-  { name: 'Nazia Pearl Sooting', role: 'USG, Public Relations', council: 'secretariat' },
   { name: 'Hemraj Dass', role: 'USG, IT and Design', council: 'secretariat' },
   { name: 'Rishat Kashyap', role: 'USG, Operations and Logistics', council: 'secretariat' },
   { name: 'Bibek Kumar Singh', role: 'USG, Marketing', council: 'secretariat', photo: 'team-bibek-singh' },
