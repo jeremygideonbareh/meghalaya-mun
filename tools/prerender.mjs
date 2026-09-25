@@ -12,7 +12,7 @@ let out = html.replace('<div id="root"></div>', `<div id="root">${render()}</div
 
 // Inline the (small) stylesheet so the first paint needs a single request
 out = out.replace(/<link rel="stylesheet" crossorigin href="([^"]+)">/, (_, href) => {
-  const css = fs.readFileSync(path.join(root, 'dist', href.replace(/^\/meghalaya-mun\//, '')), 'utf8')
+  const css = fs.readFileSync(path.join(root, 'dist', href.replace(/^\//, '')), 'utf8')
   return `<style>${css}</style>`
 })
 fs.writeFileSync(file, out)
